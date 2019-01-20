@@ -6,8 +6,9 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>SheridanEsports Login</title>
         <meta name="description" content="">
+        <meta name="author" content="Judd A.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 		<link rel="stylesheet" href="css/reset.css">
@@ -27,21 +28,24 @@
     </head>
     <body>
         <div class="background">
-        <img src="images/SheridanBruinsLogo3.png" alt="Bruins Logo">
-    </div>
-    <div class="mainPageForm">
-        <!-- <form action="/action_page.php" method="post",action Specifies
-         where to send the form-data when a form is submitted; method
-         specifies how to send form. post is for sending sensitive data. -->
-        <form class="loginForm" method="post">
-            <input type="text" name="username" placeholder="Summoner Name" required><br>
-            <input type="password" name="password" placeholder="Password" required><br>
-			<div style="text-align:center">
-            <button id="signinBtn" class="btn btn-primary">Sign in</button>
-            <button id="registerBtn" class="btn btn-primary">Register</button> <!-- add onclick attribute, open new form -->
-			</div>
-        </form>
-          <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+            <img src="images/SheridanBruinsLogo3.png" alt="Bruins Logo">
+            <h3 class="logo"><strong>SHERIDAN ESPORTS.</strong></h3>
+        </div>
+        <div class="mainPageForm">
+            <!-- <form action="/action_page.php" method="post",action Specifies
+             where to send the form-data when a form is submitted; method
+             specifies how to send form. post is for sending sensitive data. -->
+            <form class="loginForm" method="post">
+                <input type="text" name="username" placeholder="Summoner Name" required><br>
+                <input type="password" name="password" placeholder="Password" required><br>
+			    <div style="text-align:center">
+                    <button id="signinBtn" class="btn btn-primary">Sign in</button>
+                    <button id="registerBtn" class="btn btn-primary">Register</button> <!-- add onclick attribute, open new form -->
+			    </div>
+            </form>
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
         <script src="js/vendor/bootstrap.min.js"></script>
