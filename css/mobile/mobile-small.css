@@ -1,0 +1,9 @@
+/*This media query is to be used with phones. */
+@media only screen and (max-width: 600px){
+	.background img{
+		display:none;
+	}
+	.mainPageForm{
+		width:100%;
+	}
+}

@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
+		<link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <style>
             body {
@@ -20,11 +20,13 @@
         </style>
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/mobile/mobile-large.css">
+		<link rel="stylesheet" href="css/mobile/mobile-small.css">
 
         <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-        <div class="bkgrnd">
+        <div class="background">
         <img src="images/SheridanBruinsLogo3.png" alt="Bruins Logo">
     </div>
     <div class="mainPageForm">
@@ -32,10 +34,12 @@
          where to send the form-data when a form is submitted; method
          specifies how to send form. post is for sending sensitive data. -->
         <form class="loginForm" method="post">
-            <input type="text" name="sname" placeholder="Summoner Name" required><br>
-            <input type="password" name="psw" placeholder="Password" required><br>
-            <button >Sign in</button>
-            <button id="rgstr">Register</button> <!-- add onclick attribute, open new form -->
+            <input type="text" name="username" placeholder="Summoner Name" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+			<div style="text-align:center">
+            <button id="signinBtn" class="btn btn-primary">Sign in</button>
+            <button id="registerBtn" class="btn btn-primary">Register</button> <!-- add onclick attribute, open new form -->
+			</div>
         </form>
           <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
