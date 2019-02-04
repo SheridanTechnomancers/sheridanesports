@@ -2629,7 +2629,7 @@ class LeagueAPI
 	public function getSummonerByName( string $summoner_name )
 	{
 		$summoner_name = str_replace(' ', '', $summoner_name);
-
+		
 		$resultPromise = $this->setEndpoint("/lol/summoner/" . self::RESOURCE_SUMMONER_VERSION . "/summoners/by-name/{$summoner_name}")
 			->setResource(self::RESOURCE_SUMMONER, "/summoners/by-name/%s")
 			->makeCall();
