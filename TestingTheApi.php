@@ -4,6 +4,9 @@ require_once __DIR__  . "/dependencies/vendor/autoload.php";
 
 use RiotAPI\LeagueAPI\LeagueAPI;
 use RiotAPI\LeagueAPI\Definitions\Region;
+use RiotAPI\DataDragonAPI\DataDragonAPI;
+
+DataDragonAPI::initByCdn();
 
 //  Initialize the library
 $api = new LeagueAPI([
@@ -14,10 +17,7 @@ $api = new LeagueAPI([
 ]);
 
 //  And now you are ready to rock!
-$champion = $api->getStaticChampion(61);
-
-echo $champion->name;  //  Orianna
-echo $champion->title; //  the Lady of Clockwork
+$champion = $api->getLeagueMaster(RANKED_SOLO_5x5);
 
 print_r($champion->getData());  //  Or array of all the data
 ?>
