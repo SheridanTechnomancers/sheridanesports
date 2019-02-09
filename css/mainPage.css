@@ -14,13 +14,9 @@ body{
     justify-content: space-between;
   }
 .header img{
-    height: 15vh;
-    width: 27vw;
+    height: 18vh;
+    width: 20vw;
 }
- .header social{
-	 height: 30ch; 
-	 width: 30vw;
- }
 .header a{
     margin-right:3.5%;
     font-family: "Arial";
