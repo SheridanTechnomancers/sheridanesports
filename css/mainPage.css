@@ -27,6 +27,11 @@ body{
     align-self: center;
     color: white;
 }
+/* Need to Center the Countdown inside the header 
+.header h2 {
+  color: white;
+  font-size: 3em;
+}*/
 .content {
     display: flex;
     flex-direction: row;
