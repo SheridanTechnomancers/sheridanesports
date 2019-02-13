@@ -19,22 +19,17 @@ $api = new LeagueAPI([
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = "TAGUP Mythbran";
+$summonerName = "TSM Bjergsen";
 
 //  And now you are ready to rock!
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase 
 //print_r($account->getData());  //  Or array of all the data
 
-//PRINT THE SUMMONER NAME 
-print_r($summonerName);
-echo "</br>";
-echo "</br>";
-echo "</br>";
+
 //PARAMETERS FOR MATCHLIST
 //eventually we will be capturing ID 0 for custom games 
 //Needs to be mapid = 1
 
-//Matchlist prints out a 4d array 
 $matchlist = $api->getMatchListByAccount($account->accountId); //WORKING
 //print_r($matchlist);
 
@@ -76,16 +71,144 @@ for($i=0; $i<10; $i++){
 }
 //print"participantId: $participantId";
 
-$playerMatchData = $matchData->participants[$participantId-1];
+$playerMatchData = $matchData->participants[$participantId];
 
 //print_r($playerMatchData);
 
+//$playerMatchData->stats-> WHERE MOST DATA IS KEPT
+//PERKS = RUNES BTW 
+//GAME STAT VARIABLES 
+$kills 			= $playerMatchData->stats->kills; 							//KILLS
+$assists 		= $playerMatchData->stats->assists; 						//ASSIST
+$deaths 		= $playerMatchData->stats->deaths; 							//DEATHS
+																			//CALCULATING KDA
+if($deaths == 0) 															//IF THERE'S NO DEATHS
+$kda 			= $kills + $assists;										//KDA WITHOUT DEATHS 
+else 																		//IF DEATHS 
+$kda 			= $kills + $assists / $deaths; 								//KDA WITH DEATHS 
+$cs 			= $playerMatchData->stats->totalMinionsKilled;				//CS 
+$ltsl 			= $playerMatchData->stats->longestTimeSpentLiving;			//LONGEST TIME SPENT LIVING 
+$visionScore 	= $playerMatchData->stats->visionScore; 					//VISION SCORE
+//$mDDTG 		= $playerMatchData->stats->magicDamageDealtToChampions;		//MAGIC DAMAGE DEALT TO CHAMPS (NOT USED RN)
+//$dDTO 		= $playerMatchData->stats->damageDealtToObjectives;			//DAMAGE DEALT TO OBJECTIVES (NOT USED RN) 
+//$tTCCD		= $playerMatchData->stats->totalTimeCrowdControlDealt;		//TOTAL CC TIME DEALT (NOT USED RN) 
+//$dDTT			= $playerMatchData->stats->damageDealtToTurrets;			//DAMAGE DEALT TO TURRETS(NOT USED RN )
+$jungleCS		= $playerMatchData->stats->neutralMinionsKilled; 			//JUNGLE CS 
+//$pDDTC		= $playerMatchData->stats->physicalDamageDealtToChampions;	//PHYSICAL DAMAGE DEALT TO CHAMPS (NOT USED RN) 
+//lMultiKill	= $playerMatchData->stats->largestMutliKill;				//LARGEST MUTLIKILL (NOT USED RN) 
+$wardsKilled	= $playerMatchData->stats->wardsKilled;						//WARDS KILLED
+//$largestCrit	= $playerMatchData->stats->largestCriticalStrike;			//LARGEST CRITICAL STRIKE (NOT USED RN) 
+//$lKillingSpree= $playerMatchData->stats->largestKillingSpree;				//LARGEST KILLING SPREE (NOT USED RN)
+//$tripleKills 	= $playerMatchData->stats->tripleKills;						//TRIPLE KILLS (NOT USED RN)
+//$quadraKills	= $playerMatchData->stats->quadraKills; 					//QUADRA KILLS (NOT USED RN)
+//$doubleKills 	= $playerMatchData->stats->doubleKills;						//DOUBLE KILLS (NOT USED RN)
+//$pentaKills	= $playerMatchData->stats->pentaKills; 						//PENTA KILLS (NOT USED RN) 
+//$magicDmgDealt= $playerMatchData->stats->magicDamageDealt;				//MAGIC DAMAGE DEALT (NOT USED RN) 
+//$item1		= $playerMatchData->stats->item0;							//ITEM 1 (NOT USED RN BUT NEEDS TO BE)
+//$item2		= $playerMatchData->stats->item1; 							//ITEM 2 (NOT USED YET BUT NEEDS TO BE)
+//$item3		= $playerMatchData->stats->item2; 							//ITEM 3 (NOT USED YET BUT NEEDS TO BE)
+//$item4		= $playerMatchData->stats->item3;							//ITEM 4 (NOT USED RN BUT NEEDS TO BE)
+//$item5		= $playerMatchData->stats->item4; 							//ITEM 5 (NOT USED YET BUT NEEDS TO BE)
+//$item6		= $playerMatchData->stats->item5; 							//ITEM 6 (NOT USED YET BUT NEEDS TO BE)
+//$trinket		= $playerMatchData->stats->item6; 							//trinket????(NOT USED YET BUT NEEDS TO BE)
+//$selfMitgDmg	= $playerMatchData->stats->damageSelfMitigated;				//SELF DAMAGE MITIGATED (NOT USED RN)
+//$mgcDmgTkn	= $playerMatchData->stats->magicalDamageTaken;				//MAGIC DAMAGE TAKEN(NOT USED RN) 
+//$fInhibKill	= $playerMatchData->stats->firstInhibitorKill;				//FIRST INHIBITOR KILL(NOT USED RN) 
+//$truedmgtkn	= $playerMatchData->stats->trueDamageTaken; 				//TRUE DAMAGE TAKEN(NOT USED RN)
+//$goldSpent	= $playerMatchData->stats->goldSpent; 						//GOLD SPENT(NOT USED RN)
+//$truedmgdealt	= $playerMatchData->stats->trueDamageDealt;					//TRUE DAMAGE DEALT (NOT USED RN)
+//$tDmgTaken	= $playerMatchData->stats->totalDamageTaken;				//TOTAL DAMAGE TAKEN(NOT USED RN) 
+//$physicDmgDlt	= $playerMatchData->stats->physicalDamageDealt;				//PHYSICAL DAMAGE DEALT (NOT USED RN) 
+//$tDDTC		= $playerMatchData->stats->totalDamageDealtToChampions;		//TOTAL DAMAGE DEALT TO CHAMPS (NOT USED RN)
+//$physicDmgTkn	= $playerMatchData->stats->physicalDamageTaken;				//PHYSICAL DAMAGE TAKEN (NOT USED RN) 
+$results = "";																//GAME RESULTS VARIABLE
+if($playerMatchData->stats->win == 1)										//WIN CODE 
+	$results = "Win"; 														//WIN 
+else																		//LOSS CODE
+	$results = "Loss";														//Loss
+//$tDmgDealt	= $playerMatchData->stats->totalDamageDealt; 				//TOTAL DAMAGE DEALT(NOT USED RN) 
+$wardsPlaced 	= $playerMatchData->stats->wardsPlaced;						//WARDS PLACED 
+$firstBlood = "";															//FIRST BLOOD VARIABLE
+if($playerMatchData->stats->firstBloodKill == 1)							//YES FIRST BLOOD CODE
+	$firstBlood = "Yes"; 													//FIRST BLOOD 
+else																		//NO FIRST BLOOD CODE
+	$firstBlood = "No";														//FIRST BLOOD
+$turretKills	= $playerMatchData->stats->turretKills;						//TURRET KILLS
+$goldEarned 	= $playerMatchData->stats->goldEarned;						//GOLD EARNED 
+//$killingSprees= $playerMatchData->stats->killingSprees;					//KILLING SPREE (NOT USED RN)
+//$fTowerAssist	= $playerMatchData->stats->firstTowerAssist;				//FIRST TOWER ASSIST (NOT USED RN)
+//$fTowerKill	= $playerMatchData->stats->firstTowerKill; 					//FIRST TOWER KILL (NOT USED RN) 
+$champLvl		= $playerMatchData->stats->champLevel; 						//CHAMPION LEVEL 
+//$inhibitorKill= $playerMatchData->stats->inhibitorKills; 					//INHIBITOR KILLS (NOT USED RN) 
+$visionBought	= $playerMatchData->stats->visionWardsBoughtInGame;			//VISION WARDS BOUGHT 
+//$totalHeal 	= $playerMatchData->stats->totalHeal; 						//TOTAL HEAL(NOT USED RN) 
+//$timeCCOthers	= $playerMatchData->stats->timeCCingOthers					//TIME CCING OTHERS
+
+//PRINT VALUES
+//SUMMONER NAME 
+print_r($summonerName);
+echo "</br>";
+echo "</br>";
+echo "</br>";
+
+//GAME STUFF
 //KDA
-$kda = ($playerMatchData->stats->kills + $playerMatchData->stats->assists) / ($playerMatchData->stats->deaths);
 print "KDA: $kda";
 echo "</br>";
+
+//LONGEST TIME SPENT LIVING 
+print "Longest Time Spent Living : $ltsl";
+echo "</br>";
+
+//WIN/Loss
+print "Results: $results";
+echo "<br>";
+
+//CHAMPION LEVEL
+print "Champion Level: $champLvl";
+echo "<br>";
+
+//TURRET KILLS
+print "Turret Kills: $turretKills";
+echo "<br>";
+
+//FIRST BLOOD
+print "First Blood: $firstBlood";
+echo "<br>";
+
+//GOLD EARNED 
+print "Gold Earned: $goldEarned";
+echo "<br>";
+
+//CS STUFF
 //CS
-$cs = $playerMatchData->stats->totalMinionsKilled;
 print "CS: $cs";
+echo "</br>";
+
+//JUNGLE CS 
+if($jungleCS != 0){
+	print "Jungle CS: $jungleCS";
+	echo "<br>";
+}
+
+
+//VISION STUFF 
+//VISION SCORE
+print "Vision Score: $visionScore";
+echo "</br>";
+
+//WARDS KILLED
+print "Wards Killed : $wardsKilled";
+echo "<br>";
+
+//VISION WARDS BOUGHT 
+print "Vision Wards Bought : $visionBought";
+echo "<br>";
+
+//WARDS PLACED 
+print "Wards Placed: $wardsPlaced";
+echo "<br>";
+
+
 
 ?>
