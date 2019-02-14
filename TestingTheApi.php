@@ -19,11 +19,11 @@ $api = new LeagueAPI([
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = "Ig Mythbran"; // HARDCODED SUMMONER NAME 
+$summonerName = "Ig Mythbran"; //HARDCODED SUMMONER NAME 
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase 
 
 /*WHAT YOU CAN GET FROM THE ARRAY 
-* print_r($account->getData()); //  Or array of all the data
+* print_r($account->getData()); //Or array of all the data
 * $account->id					//SUMMONER ID
 * $account->accountId			//THIS IS THE ENCRYPTED ACCOUNTID. USE THIS FOR ALL OTHER REQUESTS
 * $account->puuid				//NO IDEA 
@@ -369,7 +369,7 @@ if($playerMatchData->stats->win == 1)										//WON GAME
 else
 	$results 	= "Loss;";													//LOST GAME 
 $champLvl		= $playerMatchData->stats->champLevel;						//CHAMPION LEVEL 
-if($playerMatchData->stats->firstBloodKill == 1)								//IF GOT FIRST BLOOD
+if($playerMatchData->stats->firstBloodKill == 1)							//IF GOT FIRST BLOOD
 	$firstBlood = "Yes";
 else																		//NO FIRST BLOOD 
 	$firstBlood = "No";
