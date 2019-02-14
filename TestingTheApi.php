@@ -378,18 +378,30 @@ $goldDelta1020	= $playerMatchData->timeline->goldPerMinDeltas['10-20'];	//GOLD P
 $goldDelta2030	= $playerMatchData->timeline->goldPerMinDeltas['20-30'];	//GOLD PER MINUTE DELTA MINUTES 20-30
 $cspermin		= round($cs/$gameTimeM, 2);									//CS PER MINUTE 
 $champName 		= $champion->name; 											//CHAMPION NAME 
+if($playerMatchData->teamId	== 100)											//BLUE SIDE 
+	$teamSide 	= "Blue"; 
+elseif($playerMatchData->teamId == 200)										//RED SIDE
+	$teamSide 	= "Red";
+else																		//ERROR 
+	$teamSide 	= "Error"; 
 
 
 //PRINT VALUES
 //SUMMONER NAME 
-print "$summonerName </br> Played: $champName <br>";
+print "$summonerName | Played: $champName <br>";
 
 //GAME STUFF
 //GAME INFORMATION 
-print "Season: $season   Game Duration: $gameTime <br><br>";
+print "Season: $season | Team Side: $teamSide | Game Duration: $gameTime<br><br>";
 
 //KDA
 print "KDA: $kills/$deaths/$assists      $kda </br>";
+
+//CS DELTAS 
+print "CS Deltas: 0-10: $csDelta010 | 10-20: $csDelta1020 | 20-30: $csDelta2030 </br>";
+
+//GOLD DELTAS 
+print "Gold Deltas: 0-10: $goldDelta010 | 10-20: $goldDelta1020 | 20-30: $goldDelta2030 </br>";
 
 //KILLING SPREE
 print "Killing Spree: $killingSpree <br>";
@@ -409,9 +421,6 @@ print "First Blood: $firstBlood <br>";
 //GOLD EARNED 
 print "Gold Earned: $goldEarned <br>";
 
-//GOLD DELTAS 
-print "Gold DELTAS </br>0-10: $goldDelta010 </br> 10-20: $goldDelta1020 </br> 20-30: $goldDelta2030 </br>";
-
 //CS STUFF
 //CS
 print "CS: $cs </br>";
@@ -419,9 +428,6 @@ print "CS: $cs </br>";
 //JUNGLE CS 
 if($jungleCS != 0)
 	print "Jungle CS: $jungleCS <br>";
-
-//CS DELTAS 
-print "CS DELTAS </br>0-10: $csDelta010 </br> 10-20: $csDelta1020 </br> 20-30: $csDelta2030 </br>";
 
 //CS PER MINUTE 
 print "CS/Min: $cspermin <br>";
