@@ -4,17 +4,38 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901
+class ComposerStaticInit9625fcd78ed1f4e11af81f0827f47bd1
 {
     public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         'a12da592622097d2b593a430e32e13fd' => __DIR__ . '/..' . '/nette/utils/src/loader.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'j' => 
+        array (
+            'jeremykenedy\\laravelusers\\' => 26,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Contracts\\' => 18,
+            'Symfony\\Component\\Translation\\' => 30,
+            'Symfony\\Component\\Routing\\' => 26,
+            'Symfony\\Component\\HttpKernel\\' => 29,
+            'Symfony\\Component\\HttpFoundation\\' => 33,
+            'Symfony\\Component\\Finder\\' => 25,
+            'Symfony\\Component\\EventDispatcher\\' => 34,
+            'Symfony\\Component\\Debug\\' => 24,
+        ),
         'R' => 
         array (
             'RiotAPI\\LeagueAPI\\' => 18,
@@ -22,7 +43,23 @@ class ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901
         ),
         'P' => 
         array (
+            'Psr\\SimpleCache\\' => 16,
+            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
+        ),
+        'I' => 
+        array (
+            'Illuminate\\View\\' => 16,
+            'Illuminate\\Support\\' => 19,
+            'Illuminate\\Session\\' => 19,
+            'Illuminate\\Routing\\' => 19,
+            'Illuminate\\Pipeline\\' => 20,
+            'Illuminate\\Http\\' => 16,
+            'Illuminate\\Filesystem\\' => 22,
+            'Illuminate\\Events\\' => 18,
+            'Illuminate\\Contracts\\' => 21,
+            'Illuminate\\Container\\' => 21,
         ),
         'G' => 
         array (
@@ -30,9 +67,61 @@ class ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Inflector\\' => 26,
+        ),
+        'C' => 
+        array (
+            'Collective\\Html\\' => 16,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'jeremykenedy\\laravelusers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jeremykenedy/laravel-users/src',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Contracts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/contracts',
+        ),
+        'Symfony\\Component\\Translation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/translation',
+        ),
+        'Symfony\\Component\\Routing\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/routing',
+        ),
+        'Symfony\\Component\\HttpKernel\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-kernel',
+        ),
+        'Symfony\\Component\\HttpFoundation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-foundation',
+        ),
+        'Symfony\\Component\\Finder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/finder',
+        ),
+        'Symfony\\Component\\EventDispatcher\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
+        ),
+        'Symfony\\Component\\Debug\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/debug',
+        ),
         'RiotAPI\\LeagueAPI\\' => 
         array (
             0 => __DIR__ . '/..' . '/dolejska-daniel/riot-api/src/LeagueAPI',
@@ -41,9 +130,61 @@ class ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901
         array (
             0 => __DIR__ . '/..' . '/dolejska-daniel/riot-api/src/DataDragonAPI',
         ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Illuminate\\View\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/view',
+        ),
+        'Illuminate\\Support\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/support',
+        ),
+        'Illuminate\\Session\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/session',
+        ),
+        'Illuminate\\Routing\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/routing',
+        ),
+        'Illuminate\\Pipeline\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/pipeline',
+        ),
+        'Illuminate\\Http\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/http',
+        ),
+        'Illuminate\\Filesystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/filesystem',
+        ),
+        'Illuminate\\Events\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/events',
+        ),
+        'Illuminate\\Contracts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/contracts',
+        ),
+        'Illuminate\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/container',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -57,6 +198,18 @@ class ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Doctrine\\Common\\Inflector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+        ),
+        'Collective\\Html\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravelcollective/html/src',
+        ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $classMap = array (
@@ -106,9 +259,10 @@ class ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite34ccf5e998de6a2b84fa7b5443f1901::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9625fcd78ed1f4e11af81f0827f47bd1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9625fcd78ed1f4e11af81f0827f47bd1::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit9625fcd78ed1f4e11af81f0827f47bd1::$fallbackDirsPsr4;
+            $loader->classMap = ComposerStaticInit9625fcd78ed1f4e11af81f0827f47bd1::$classMap;
 
         }, null, ClassLoader::class);
     }
