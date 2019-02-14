@@ -330,8 +330,7 @@ $playerMatchData = $matchData->participants[$participantId];
 */
 
 //DRAGONAPI CALL FOR CHAMPION DATA  
-$champion = $api->getStaticChampion($playerMatchData->championId, true);
-$champName = $champion->name; 
+$champion = $api->getStaticChampion($playerMatchData->championId, true); 
 
 //REQUIRED VARIABLES
 ////GAME/PLAYER INFORMATION 
