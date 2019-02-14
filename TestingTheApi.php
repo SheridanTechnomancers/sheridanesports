@@ -14,13 +14,14 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-68acb819-e350-466d-a62c-2712a63def54',
+	LeagueAPI::SET_KEY    => 'RGAPI-57137a02-3e06-4bd6-8f3e-bfef17dfe502',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
 $summonerName = "Ig Mythbran"; // HARDCODED SUMMONER NAME 
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase 
+
 /*WHAT YOU CAN GET FROM THE ARRAY 
 * print_r($account->getData()); //  Or array of all the data
 * $account->id					//SUMMONER ID
@@ -52,6 +53,7 @@ $matchlist = $api->getMatchListByAccount($account->accountId); //WORKING
 * This is to be able to retrieve gameId 
 * We can use gameId to get game specific data
 */
+
 foreach($matchlist->matches as $game)
 	$gameIds[] = $game->gameId;
 	
@@ -88,9 +90,9 @@ $matchData = $api->getMatch($gameIds[0]);
 * $matchData->gameDuration	//GAME DURATION 
 * $matchData->gameCreation	//CREATION DATE 
 * Need to break the array down to access this information below
-* participantIdentities		//ARRAY THAT HOLDS INDIVIDUAL PLAYER ACCOUNT STATS 
-* $teams					//HOLDS TEAM DATA IN REGARDS TO THE GAME 
-* $participants				//THIS IS WHERE MOST OF THE STATS ARE HELD
+* +participantIdentities	//ARRAY THAT HOLDS INDIVIDUAL PLAYER ACCOUNT STATS 
+* +teams					//HOLDS TEAM DATA IN REGARDS TO THE GAME 
+* +participants				//THIS IS WHERE MOST OF THE STATS ARE HELD
 */
 
 /*BREAKING DOWN THE PARTICIPANTIDENTITIES ARRAY OUT OF MATCHDATA
@@ -112,6 +114,38 @@ foreach($matchData->participantIdentities as $participantIds){
 * $participant[]->profileIcon		//PROFILE ICON ID. MATCH WITH DRAGONAPI
 * $participant[]->summonerId		//SPECIFIC ACCOUNT ID 
 * $participant[]->accountId			//ACCOUNT ID
+*/
+
+/*THIS BREAKS DOWN THE TEAMS ARRAY
+* Team arrays give you team specific data  
+* This can be anything regarding the game 
+* linked to a specific team 
+*/
+foreach($matchData->teams as $teams){
+		$team[] = $teams;
+
+}
+
+/*WHAT THE ARRAY HAS 
+***** USAGE : HAS 2 ARRAYS INSIDE. ONE FOR RED TEAM AND ONE FOR BLUE $team[1/2]
+* $team[]->firstDragon						//FIRST DRAGON BOOLEAN 
+* $team[]->firstInhibitor					//WHICH  TEAM GOT THE FIRST INHIB 
+* $team[]->baronKills						//HOW MANY BARON KILLS
+* $team[]->firstRiftHerald					//RIFT HERALD KILL
+* $team[]->firstBaron						//FIRST BARON KILL
+* $team[]->riftHeraldKills					//UHH PROBABLY WONT BE USED. CAN ONLY HAVE 1 RIFT HERALD
+* $team[]->firstBlood						//FIRST BLOOD 
+* $team[]->teamId							//WHICH SIDE YOU'RE ON. 100 FOR BLUE 200 FOR RED 
+* $team[]->firstTower						//WHICH TEAM TOOK FIRST TOWER BOOLEAN 
+* $team[]->vilemawKills						//NOT IN SUMMONERS RIFT
+* $team[]->inhibitorKills					//HOW MANY INHIBS EACH TEAM TOOK 
+* $team[]->towerKills						//HOW MANY TOWERS EACH TEAM TOOK 
+* $team[]->dominionVictoryScore				//NOT IN SUMMONERS RIFT. ACTUALLY LEGACY NOT IN THE GAME 
+* $team[]->win								//WIN OR LOSS 
+* $team[]->dragonKills						//DRAGON KILLS 
+/////$team[]->bans[]->						//BANS 0-4 FOR EACH TEAM. THIS IS CHAMPION BAN
+* $team[]->bans[]->pickTurn					//BAN TURN 
+% $team[]->bans[]->championId				//WHICH CHAMP WAS BANNED 
 */
 
 
@@ -184,7 +218,7 @@ $playerMatchData = $matchData->participants[$participantId];
 * $playerMatchData->stats->goldSpent							//GOLD SPENT
 * $playerMatchData->stats->participantId						//SUMMONER GAME ID LINKING ACCOUNT TO STATS 
 * $playerMatchData->stats->win									//WIN LOSS. 1 = WIN 0 = LOSS 
- * $playerMatchData->stats->goldEarned							//GOLD EARNED 
+* $playerMatchData->stats->goldEarned							//GOLD EARNED 
 * $playerMatchData->stats->champLevel							//CHAMP LVL 
 * $playerMatchData->stats->totalHeal							//TOTAL HEALING DONE 
 
@@ -274,163 +308,140 @@ $playerMatchData = $matchData->participants[$participantId];
 * $playerMatchData->timeline->lane								//WHAT LANE WAS PLAYED 
 * $playerMatchData->timeline->participantId						//PARTICIPANT ID 
 * $playerMatchData->timeline->csDiffPerMinDeltas				//NOT USED 
-* $playerMatchData->timeline->goldPerMinuteDeltas				//NEED TO LOOK UP MORE INFO ON THIS 
-* 10-20
-* 0-10
-* 20-30
-* $playerMatchData->timeline->xpDiffPerMinDeltas				//NOT USED 
-* $playerMatchData->timeline->creepsPerMinDeltas				//NEED TO LOOK UP MORE INFO ON THIS 
-* 10-20
-* 0-10
-* 20-30
-* $playerMatchData->timeline->xpPerMinDeltas
-* 10-20
-* 0-10
-* 20-30
+* $playerMatchData->timeline->goldPerMinDeltas[' ']				//GOLD PER MINUTE DELTAS. USE WITH [' '] TO GATHER SPECIFIC TIME DATA  
+* ['10-20']														//10-20 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['0-10']														//0-10 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['20-30']														//20-30 MINUTES. MUST USE WITH COMMENT TAGS 
+* $playerMatchData->timeline->xpDiffPerMinDeltas[' ']			//NOT USED 
+* $playerMatchData->timeline->creepsPerMinDeltas[' ']			//CS PER MINUTE DELTAS. USE WITH [' '] TO GATHER SPECIFIC TIME DATA  
+* ['10-20']														//10-20 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['0-10']														//0-10 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['20-30']														//20-30 MINUTES. MUST USE WITH COMMENT TAGS 
+* $playerMatchData->timeline->xpPerMinDeltas[' ']				//XP PER MINUTE DELTAS. USE WITH [' '] TO GATHER SPECIFIC TIME DATA  
+* ['10-20']														//10-20 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['0-10']														//0-10 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['20-30']														//20-30 MINUTES. MUST USE WITH COMMENT TAGS 
 * $playerMatchData->timeline->role								//ROLE PLAYED 
 * $playerMatchData->timeline->damageTakenDiffPerMinDeltas		//NOT USED 
-* $playerMatchData->timeline->damageTakenPerMinDeltas			//NEED MORE INFO ON THIS 
-* 10-20
-* 0-10
-* 20-30
+* $playerMatchData->timeline->damageTakenPerMinDeltas[' ']		//DAMAGE TAKEN PER MINUTE DELTAS. USE WITH [' '] TO GATHER SPECIFIC TIME DATA  
+* ['10-20']														//10-20 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['0-10']														//0-10 MINUTES. MUST USE WITH COMMENT TAGS 
+* ['20-30']														//20-30 MINUTES. MUST USE WITH COMMENT TAGS 
 */
 
-//$playerMatchData->stats-> WHERE MOST DATA IS KEPT
-//PERKS = RUNES BTW 
-//GAME STAT VARIABLES
+//DRAGONAPI CALL FOR CHAMPION DATA  
+$champion = $api->getStaticChampion($playerMatchData->championId, true);
+$champName = $champion->name; 
+
+//REQUIRED VARIABLES
+////GAME/PLAYER INFORMATION 
 $season			= ($matchData->gameVersion) ; 								//SEASON 
 $totalGames 	= $matchlist->totalGames; 									//TOTAL GAMES PLAYED ON THE ACCOUNTID
+$gameTimeH		= floor(($matchData->gameDuration)/3600);					//TOTAL HOURS GAME TIME 
+$gameTimeM		= floor(($matchData->gameDuration)/60%60);					//TOTAL MINUTES GAME TIME 
+$gameTimeS		= floor(($matchData->gameDuration)%60);						//TOTAL SECONDS GAME TIME 
+$gameTime		= "$gameTimeH : $gameTimeM : $gameTimeS";					//GAME DURATION
+
+////GAME STATS 
 $kills 			= $playerMatchData->stats->kills; 							//KILLS
 $assists 		= $playerMatchData->stats->assists; 						//ASSIST
 $deaths 		= $playerMatchData->stats->deaths; 							//DEATHS
-																			//CALCULATING KDA
+//CALCULATING KDA
 if($deaths == 0) 															//IF THERE'S NO DEATHS
-$kda 			= $kills + $assists;										//KDA WITHOUT DEATHS 
+	$kda 		= $kills + $assists;										//KDA WITHOUT DEATHS 
 else 																		//IF DEATHS 
-$kda 			= $kills + $assists / $deaths; 								//KDA WITH DEATHS 
+	$kda 		= $kills + $assists / $deaths; 								//KDA WITH DEATHS 
 $cs 			= $playerMatchData->stats->totalMinionsKilled;				//CS 
+$jungleCS		= $playerMatchData->stats->neutralMinionsKilled; 			//JUNGLE CS 
+$csDelta010		= $playerMatchData->timeline->creepsPerMinDeltas['0-10'];	//CS DELTA FOR MINUTES 0-10;
+$csDelta1020	= $playerMatchData->timeline->creepsPerMinDeltas['10-20'];	//CS DELTA FOR MINUTES 10-20
+$csDelta2030	= $playerMatchData->timeline->creepsPerMinDeltas['20-30'];	//CS DELTA FOR MINUTES 20-30
 $ltsl 			= $playerMatchData->stats->longestTimeSpentLiving;			//LONGEST TIME SPENT LIVING 
 $visionScore 	= $playerMatchData->stats->visionScore; 					//VISION SCORE
-//$mDDTG 		= $playerMatchData->stats->magicDamageDealtToChampions;		//MAGIC DAMAGE DEALT TO CHAMPS (NOT USED RN)
-//$dDTO 		= $playerMatchData->stats->damageDealtToObjectives;			//DAMAGE DEALT TO OBJECTIVES (NOT USED RN) 
-//$tTCCD		= $playerMatchData->stats->totalTimeCrowdControlDealt;		//TOTAL CC TIME DEALT (NOT USED RN) 
-//$dDTT			= $playerMatchData->stats->damageDealtToTurrets;			//DAMAGE DEALT TO TURRETS(NOT USED RN )
-$jungleCS		= $playerMatchData->stats->neutralMinionsKilled; 			//JUNGLE CS 
-//$pDDTC		= $playerMatchData->stats->physicalDamageDealtToChampions;	//PHYSICAL DAMAGE DEALT TO CHAMPS (NOT USED RN) 
-//lMultiKill	= $playerMatchData->stats->largestMutliKill;				//LARGEST MUTLIKILL (NOT USED RN) 
 $wardsKilled	= $playerMatchData->stats->wardsKilled;						//WARDS KILLED
-//$largestCrit	= $playerMatchData->stats->largestCriticalStrike;			//LARGEST CRITICAL STRIKE (NOT USED RN) 
-//$lKillingSpree= $playerMatchData->stats->largestKillingSpree;				//LARGEST KILLING SPREE (NOT USED RN)
-//$tripleKills 	= $playerMatchData->stats->tripleKills;						//TRIPLE KILLS (NOT USED RN)
-//$quadraKills	= $playerMatchData->stats->quadraKills; 					//QUADRA KILLS (NOT USED RN)
-//$doubleKills 	= $playerMatchData->stats->doubleKills;						//DOUBLE KILLS (NOT USED RN)
-//$pentaKills	= $playerMatchData->stats->pentaKills; 						//PENTA KILLS (NOT USED RN) 
-//$magicDmgDealt= $playerMatchData->stats->magicDamageDealt;				//MAGIC DAMAGE DEALT (NOT USED RN) 
-//$item1		= $playerMatchData->stats->item0;							//ITEM 1 (NOT USED RN BUT NEEDS TO BE)
-//$item2		= $playerMatchData->stats->item1; 							//ITEM 2 (NOT USED YET BUT NEEDS TO BE)
-//$item3		= $playerMatchData->stats->item2; 							//ITEM 3 (NOT USED YET BUT NEEDS TO BE)
-//$item4		= $playerMatchData->stats->item3;							//ITEM 4 (NOT USED RN BUT NEEDS TO BE)
-//$item5		= $playerMatchData->stats->item4; 							//ITEM 5 (NOT USED YET BUT NEEDS TO BE)
-//$item6		= $playerMatchData->stats->item5; 							//ITEM 6 (NOT USED YET BUT NEEDS TO BE)
-//$trinket		= $playerMatchData->stats->item6; 							//trinket????(NOT USED YET BUT NEEDS TO BE)
-//$selfMitgDmg	= $playerMatchData->stats->damageSelfMitigated;				//SELF DAMAGE MITIGATED (NOT USED RN)
-//$mgcDmgTkn	= $playerMatchData->stats->magicalDamageTaken;				//MAGIC DAMAGE TAKEN(NOT USED RN) 
-//$fInhibKill	= $playerMatchData->stats->firstInhibitorKill;				//FIRST INHIBITOR KILL(NOT USED RN) 
-//$truedmgtkn	= $playerMatchData->stats->trueDamageTaken; 				//TRUE DAMAGE TAKEN(NOT USED RN)
-//$goldSpent	= $playerMatchData->stats->goldSpent; 						//GOLD SPENT(NOT USED RN)
-//$truedmgdealt	= $playerMatchData->stats->trueDamageDealt;					//TRUE DAMAGE DEALT (NOT USED RN)
-//$tDmgTaken	= $playerMatchData->stats->totalDamageTaken;				//TOTAL DAMAGE TAKEN(NOT USED RN) 
-//$physicDmgDlt	= $playerMatchData->stats->physicalDamageDealt;				//PHYSICAL DAMAGE DEALT (NOT USED RN) 
-//$tDDTC		= $playerMatchData->stats->totalDamageDealtToChampions;		//TOTAL DAMAGE DEALT TO CHAMPS (NOT USED RN)
-//$physicDmgTkn	= $playerMatchData->stats->physicalDamageTaken;				//PHYSICAL DAMAGE TAKEN (NOT USED RN) 
-$results = "";																//GAME RESULTS VARIABLE
-if($playerMatchData->stats->win == 1)										//WIN CODE 
-	$results = "Win"; 														//WIN 
-else																		//LOSS CODE
-	$results = "Loss";														//Loss
-//$tDmgDealt	= $playerMatchData->stats->totalDamageDealt; 				//TOTAL DAMAGE DEALT(NOT USED RN) 
-$wardsPlaced 	= $playerMatchData->stats->wardsPlaced;						//WARDS PLACED 
-$firstBlood = "";															//FIRST BLOOD VARIABLE
-if($playerMatchData->stats->firstBloodKill == 1)							//YES FIRST BLOOD CODE
-	$firstBlood = "Yes"; 													//FIRST BLOOD 
-else																		//NO FIRST BLOOD CODE
-	$firstBlood = "No";														//FIRST BLOOD
-$turretKills	= $playerMatchData->stats->turretKills;						//TURRET KILLS
-$goldEarned 	= $playerMatchData->stats->goldEarned;						//GOLD EARNED 
-//$killingSprees= $playerMatchData->stats->killingSprees;					//KILLING SPREE (NOT USED RN)
-//$fTowerAssist	= $playerMatchData->stats->firstTowerAssist;				//FIRST TOWER ASSIST (NOT USED RN)
-//$fTowerKill	= $playerMatchData->stats->firstTowerKill; 					//FIRST TOWER KILL (NOT USED RN) 
-$champLvl		= $playerMatchData->stats->champLevel; 						//CHAMPION LEVEL 
-//$inhibitorKill= $playerMatchData->stats->inhibitorKills; 					//INHIBITOR KILLS (NOT USED RN) 
+$wardsPlaced	= $playerMatchData->stats->wardsPlaced;						//WARDS PLACED 
 $visionBought	= $playerMatchData->stats->visionWardsBoughtInGame;			//VISION WARDS BOUGHT 
-//$totalHeal 	= $playerMatchData->stats->totalHeal; 						//TOTAL HEAL(NOT USED RN) 
-//$timeCCOthers	= $playerMatchData->stats->timeCCingOthers					//TIME CCING OTHERS
+$ddtc			= $playerMatchData->stats->totalDamageDealtToChampions;		//TOTAL DAMAGE DEALT TO CHAMPS 
+$killingSpree	= $playerMatchData->stats->killingSprees;					//KILLING SPREES 
+$goldEarned		= $playerMatchData->stats->goldEarned; 						//GOLD EARNED 
+//WIN/LOSS 	
+if($playerMatchData->stats->win == 1)										//WON GAME 
+	$results 	= "Win"; 
+else
+	$results 	= "Loss;";													//LOST GAME 
+$champLvl		= $playerMatchData->stats->champLevel;						//CHAMPION LEVEL 
+if($playerMatchData->stats->firstBloodKill == 1)								//IF GOT FIRST BLOOD
+	$firstBlood = "Yes";
+else																		//NO FIRST BLOOD 
+	$firstBlood = "No";
+$goldDelta010	= $playerMatchData->timeline->goldPerMinDeltas['0-10']; 	//GOLD PER MINUTE DELTA MINUTES 0-10
+$goldDelta1020	= $playerMatchData->timeline->goldPerMinDeltas['10-20'];	//GOLD PER MINUTE DELTA MINUTES 10-20
+$goldDelta2030	= $playerMatchData->timeline->goldPerMinDeltas['20-30'];	//GOLD PER MINUTE DELTA MINUTES 20-30
+$cspermin		= round($cs/$gameTimeM, 2);									//CS PER MINUTE 
+$champName 		= $champion->name; 											//CHAMPION NAME 
+
 
 //PRINT VALUES
 //SUMMONER NAME 
-print_r($participant[$participantId]->summonerName);
-echo "</br>";
-echo "</br>";
-echo "</br>";
+print "$summonerName </br> Played: $champName <br>";
 
 //GAME STUFF
+//GAME INFORMATION 
+print "Season: $season   Game Duration: $gameTime <br><br>";
+
 //KDA
-print "KDA: $kda";
-echo "</br>";
+print "KDA: $kills/$deaths/$assists      $kda </br>";
+
+//KILLING SPREE
+print "Killing Spree: $killingSpree <br>";
 
 //LONGEST TIME SPENT LIVING 
-print "Longest Time Spent Living : $ltsl";
-echo "</br>";
+print "Longest Time Spent Living : $ltsl </br>";
 
 //WIN/Loss
-print "Results: $results";
-echo "<br>";
+print "Results: $results <br>";
 
 //CHAMPION LEVEL
-print "Champion Level: $champLvl";
-echo "<br>";
-
-//TURRET KILLS
-print "Turret Kills: $turretKills";
-echo "<br>";
+print "Champion Level: $champLvl <br>";
 
 //FIRST BLOOD
-print "First Blood: $firstBlood";
-echo "<br>";
+print "First Blood: $firstBlood <br>";
 
 //GOLD EARNED 
-print "Gold Earned: $goldEarned";
-echo "<br>";
+print "Gold Earned: $goldEarned <br>";
+
+//GOLD DELTAS 
+print "Gold DELTAS </br>0-10: $goldDelta010 </br> 10-20: $goldDelta1020 </br> 20-30: $goldDelta2030 </br>";
 
 //CS STUFF
 //CS
-print "CS: $cs";
-echo "</br>";
+print "CS: $cs </br>";
 
 //JUNGLE CS 
-if($jungleCS != 0){
-	print "Jungle CS: $jungleCS";
-	echo "<br>";
-}
+if($jungleCS != 0)
+	print "Jungle CS: $jungleCS <br>";
 
+//CS DELTAS 
+print "CS DELTAS </br>0-10: $csDelta010 </br> 10-20: $csDelta1020 </br> 20-30: $csDelta2030 </br>";
+
+//CS PER MINUTE 
+print "CS/Min: $cspermin <br>";
 
 //VISION STUFF 
 //VISION SCORE
-print "Vision Score: $visionScore";
-echo "</br>";
+print "Vision Score: $visionScore </br>";
 
 //WARDS KILLED
-print "Wards Killed : $wardsKilled";
-echo "<br>";
+print "Wards Killed : $wardsKilled <br>";
 
 //VISION WARDS BOUGHT 
-print "Vision Wards Bought : $visionBought";
-echo "<br>";
+print "Vision Wards Bought : $visionBought <br>";
 
 //WARDS PLACED 
-print "Wards Placed: $wardsPlaced";
-echo "<br>";
+print "Wards Placed: $wardsPlaced<br>";
 
+//DAMAGE STUFF 
+print "Damage Dealt to Champs: $ddtc <br>";
 
 
 ?>
