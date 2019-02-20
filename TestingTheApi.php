@@ -14,12 +14,12 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-57137a02-3e06-4bd6-8f3e-bfef17dfe502',
+	LeagueAPI::SET_KEY    => 'RGAPI-f55575d6-901b-4100-8944-bd89fc27d1fb',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = "Ig Mythbran"; //HARDCODED SUMMONER NAME 
+$summonerName = "ostrlch"; //HARDCODED SUMMONER NAME 
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase 
 
 /*WHAT YOU CAN GET FROM THE ARRAY 
@@ -33,30 +33,37 @@ $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summo
 * $account->summonerLevel		//SUMMONER LEVEL 
 */
 
-/*PARAMETERS FOR MATCHLIST
+/*PARAMETERS FOR MATCHLISTSolo
 * eventually we will be capturing ID 0 for custom games 
+* 420 for solo q
+* 440 for flex 
 * Needs to be mapid = 1
 * USAGE string ($encrypted_account_id, $queue = null, $season = null, 
 * $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null)
 * This gathers a list of games based on account ID. 
+* string $encrypted_account_id, $queue = null, $season = null, $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null
 */
-$matchlist = $api->getMatchListByAccount($account->accountId); //WORKING
+$matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
+//$matchlistSolo = $api->getMatchListByAccount($account->accountId, 440);
 
 /* WHAT YOU CAN GET FROM THE ARRAY
-* print_r($matchlist);		//PRINT THE ARRAY 
-* $matchlist->totalGames; 	//TOTAL GAMES PLAYED
-* $matchlist->startIndex; 	//START OF GAME COUNTER
-* $matchlist->endIndex; 	//END OF GAME COUNTER
+* print_r($matchlistSolo);		//PRINT THE ARRAY 
+* $matchlistSolo->totalGames; 	//TOTAL GAMES PLAYED
+* $matchlistSolo->startIndex; 	//START OF GAME COUNTER
+* $matchlistSolo->endIndex; 	//END OF GAME COUNTER
 */ 
 
 /*BREAK DOWN THE ARRAY TO HAVE GAME SPECIFIC DATA
 * This is to be able to retrieve gameId 
 * We can use gameId to get game specific data
 */
-
-foreach($matchlist->matches as $game)
+//FOR SOLO Q 
+foreach($matchlistSolo->matches as $game){
 	$gameIds[] = $game->gameId;
-	
+	$gameChampId[] = $game->champion; 
+}
+
+
 /* WHAT YOU CAN GET FROM THE ARRAY
 * $game->lane;		//LANE PLAYED
 * $game->gameId		//GAME IDENTIFICATION
@@ -335,7 +342,7 @@ $champion = $api->getStaticChampion($playerMatchData->championId, true);
 //REQUIRED VARIABLES
 ////GAME/PLAYER INFORMATION 
 $season			= ($matchData->gameVersion) ; 								//SEASON 
-$totalGames 	= $matchlist->totalGames; 									//TOTAL GAMES PLAYED ON THE ACCOUNTID
+$totalGames 	= $matchlistSolo->totalGames; 									//TOTAL GAMES PLAYED ON THE ACCOUNTID
 $gameTimeH		= floor(($matchData->gameDuration)/3600);					//TOTAL HOURS GAME TIME 
 $gameTimeM		= floor(($matchData->gameDuration)/60%60);					//TOTAL MINUTES GAME TIME 
 $gameTimeS		= floor(($matchData->gameDuration)%60);						//TOTAL SECONDS GAME TIME 
@@ -384,6 +391,19 @@ elseif($playerMatchData->teamId == 200)										//RED SIDE
 	$teamSide 	= "Red";
 else																		//ERROR 
 	$teamSide 	= "Error"; 
+$matchIdArray[] = 0;														//INITIALIZING THE MATCHID ARRAY
+$champIdNum[] = 0; 
+for($i=0; $i<100; $i++)														//STORING 100 LATEST GAMES
+	$matchIdArray[$i] = $gameIds[$i];										//GAME IDS STORED IN MATCHIDARRAY
+
+//TESTCODE
+//for($i=0; $i<100; $i++){
+	//print("$gameChampId[$i]<br>");
+	//print(($api->getStaticChampion($gameChampId[$i], true))->name);
+	//echo "<br>";
+//}
+
+
 
 
 //PRINT VALUES

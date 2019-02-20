@@ -2531,7 +2531,7 @@ class LeagueAPI
 	 *
 	 * @link https://developer.riotgames.com/api-methods/#match-v4/GET_getMatchlist
 	 */
-	public function getMatchlistByAccount( string $encrypted_account_id, $queue = null, $season = null, $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null ): Objects\MatchlistDto
+	public function getMatchlistByAccount( string $encrypted_account_id, $queue, $season = null, $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null ): Objects\MatchlistDto
 	{
 		$resultPromise = $this->setEndpoint("/lol/match/" . self::RESOURCE_MATCH_VERSION . "/matchlists/by-account/{$encrypted_account_id}")
 			->setResource(self::RESOURCE_MATCH, "/matchlists/by-account/%s")
