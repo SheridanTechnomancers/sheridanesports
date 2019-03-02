@@ -1,6 +1,6 @@
 <?php
 //  Include all required files
-require_once __DIR__  . "/dependencies/vendor/autoload.php";
+require_once __DIR__  . "/../dependencies/vendor/autoload.php";
 
 use RiotAPI\Exceptions\GeneralException;
 use RiotAPI\Objects\ChampionInfo;
@@ -14,12 +14,12 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-f55575d6-901b-4100-8944-bd89fc27d1fb',
+	LeagueAPI::SET_KEY    => 'RGAPI-d70baa70-ae11-47ec-b055-f8271e6b0776',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = "ostrlch"; //HARDCODED SUMMONER NAME 
+$summonerName = "scottlu"; //HARDCODED SUMMONER NAME 
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase 
 
 /*WHAT YOU CAN GET FROM THE ARRAY 
@@ -45,7 +45,7 @@ $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summo
 */
 $matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
 //$matchlistSolo = $api->getMatchListByAccount($account->accountId, 440);
-
+//print_r($matchlistSolo);	
 /* WHAT YOU CAN GET FROM THE ARRAY
 * print_r($matchlistSolo);		//PRINT THE ARRAY 
 * $matchlistSolo->totalGames; 	//TOTAL GAMES PLAYED
@@ -59,9 +59,13 @@ $matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKIN
 */
 //FOR SOLO Q 
 foreach($matchlistSolo->matches as $game){
+	if($game->lane == 'MID'){
 	$gameIds[] = $game->gameId;
 	$gameChampId[] = $game->champion; 
+	}
+	//$ROLE[] = $game->lane;
 }
+//print_r($ROLE[0]);
 
 
 /* WHAT YOU CAN GET FROM THE ARRAY
@@ -338,6 +342,7 @@ $playerMatchData = $matchData->participants[$participantId];
 
 //DRAGONAPI CALL FOR CHAMPION DATA  
 $champion = $api->getStaticChampion($playerMatchData->championId, true); 
+//print_r($playerMatchData->timeline->lane);
 
 //REQUIRED VARIABLES
 ////GAME/PLAYER INFORMATION 
@@ -415,7 +420,7 @@ print "$summonerName | Played: $champName <br>";
 print "Season: $season | Team Side: $teamSide | Game Duration: $gameTime<br><br>";
 
 //KDA
-print "KDA: $kills/$deaths/$assists      $kda </br>";
+print "KDA: $kills/$deaths/$assists |$kda </br>";
 
 //CS DELTAS 
 print "CS Deltas: 0-10: $csDelta010 | 10-20: $csDelta1020 | 20-30: $csDelta2030 </br>";
