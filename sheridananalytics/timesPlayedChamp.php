@@ -14,7 +14,7 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-037f6e5f-6e3d-4a8f-b09d-5c52d5b58364',
+	LeagueAPI::SET_KEY    => 'RGAPI-ee10da3e-3e8c-4d6c-87ea-1e48bafa9d77',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
@@ -39,7 +39,7 @@ $topFiveChamps=array_fill(0,5,"null");
 $timesChampsPlayed=array_fill(0,5,0);
 
 //finds the champ ids for most recent 100 games. Currently only pulls te most recent games due to error if try witth 100
-for ($j=0; $j<50; $j++){
+for ($j=0; $j<51; $j++){
 	$matchData = $api->getMatch($gameIds[$j]);
 	foreach($matchData->participantIdentities as $participantIds){
 		$participant[] = $participantIds->player;
