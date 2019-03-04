@@ -33,11 +33,6 @@ foreach($matchlistSolo->matches as $game){
 
 //champ id array
 $champIdNumArr = array_fill(0, 100, -1);
-//top five used champ ids
-$topFiveChamps=array_fill(0,5,"null");
-//the amount of times the champs were used
-$timesChampsPlayed=array_fill(0,5,0);
-
 //finds the champ ids for most recent 100 games. Currently only pulls te most recent games due to error if try witth 100
 for ($j=0; $j<51; $j++){
 	$matchData = $api->getMatch($gameIds[$j]);
@@ -59,8 +54,8 @@ for ($j=0; $j<51; $j++){
 
 //finds the 5 champions played most
 //initializations of variables
-$count=1;
-$gamesPlayed=0;
+$gamesPlayed=1;
+$champsWithCounts=[];
 //iterates through champ id array and stores times champ is played
 for ($i=0;$i<sizeof($champIdNumArr);$i++){
 	$found=1;
@@ -71,20 +66,24 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		//checks to see how many times it occurs
 		for($j=$i+1;$j<sizeof($champIdNumArr)-$j;$j++){
 			if($champIdNum== $champIdNumArr[$j]){
-				$gamesPlayed=$count++;
+				$gamesPlayed++;
 				$champIdNumArr[$j]=-1;
 			}
 		}
-
-		//finds top 5 champs played.
-			for ($k=0;$k<sizeof($topFiveChamps);$k++){
-				if($gamesPlayed>$timesChampsPlayed[$k] && $found==1){
-					$topFiveChamps[$k]=$champIdNum;
-					$timesChampsPlayed[$k]=$gamesPlayed;
-					$found=0;
-				}
-		}
-		$count=1;
+		//Stores the times played (values) with thier respective champions (keys) in an associative array.
+		$champsWithCounts[$champIdNumArr[$i]] = $gamesPlayed;
+		$gamesPlayed=1;
 	}
 }
+//sorts the associative array in descending order with respect to the values.
+arsort($champsWithCounts);
+
+//stores the top five champions
+$topFiveChamps=array_slice($champsWithCounts, 0, 5, true);
+
+/*
+//for testing
+foreach ($topFiveChamps as $key => $value) {
+	echo "Key: ".$key." Value: ".$value."<br>";
+}*/
 ?>
