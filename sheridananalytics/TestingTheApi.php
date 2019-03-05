@@ -14,12 +14,12 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-b992a5fd-f683-4f32-8baa-922bb406fcf0',
+	LeagueAPI::SET_KEY    => 'RGAPI-ee10da3e-3e8c-4d6c-87ea-1e48bafa9d77',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = $_POST['uname']; //HARDCODED SUMMONER NAME 
+$summonerName = "ostrlch"; //HARDCODED SUMMONER NAME 
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase 
 
 /*WHAT YOU CAN GET FROM THE ARRAY 
@@ -84,6 +84,7 @@ foreach($matchlistSolo->matches as $game){
 */
 
 $matchData = $api->getMatch($gameIds[0]);
+print_r($matchData->participantIdentities[0]->player->accountId);
 /*WHAT COMES OUT OF THE ARRAY 
 * print_r($matchData);		//PRINTING THE MATCH DATA ARRAY 
 * $matchData->seasonId		//SEASONID 

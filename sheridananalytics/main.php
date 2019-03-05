@@ -18,7 +18,7 @@ use RiotAPI\DataDragonAPI\Definitions\Map;
 
 DataDragonAPI::initByCdn();
 //EVAN'S CALLBACK CODE dWUxOnl1Yjh0eWJGYjF0RndrX3FwVEVwVHcuYXloaWlsT1NULXFXM1Z5WkNXaXd3dw%3D%3D
-//  Initialize the library
+//  Initialize the library //    RGAPI-ee10da3e-3e8c-4d6c-87ea-1e48bafa9d77
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
 	LeagueAPI::SET_KEY    => 'RGAPI-ee10da3e-3e8c-4d6c-87ea-1e48bafa9d77',
@@ -30,36 +30,37 @@ $api = new LeagueAPI([
 //$summonerName = $_POST['uname'];		//USERNAME
 //$ROLE = $_POST['role'];
 
-$account = $api->getSummonerByName('McGaw');
+$account = $api->getSummonerByName('ostrlch');
 $matchlistSolo = $api->getMatchListByAccount($account->accountId, 420);
 
 foreach($matchlistSolo->matches as $game){
 	$gameIds[] = $game->gameId;
-	$gameChampId[] = $game->champion;
+	//$gameChampId[] = $game->champion;
 }
+
+//$matchData = $api->getMatch($gameIds[]);
+//print_r($matchData);
 
 //champ id array
 $champIdNumArr = array_fill(0, 100, -1);
 //finds the champ ids for most recent 100 games. Currently only pulls te most recent games due to error if try witth 100
 for ($j=0; $j<50; $j++){
-	$matchData = $api->getMatch($gameIds[$j]);
-	foreach($matchData->participantIdentities as $participantIds){
-		$participant[] = $participantIds->player;
-	}
 
+	$matchData = $api->getMatch($gameIds[$j]);
 	for($i=0; $i<10; $i++){
-		if($participant[$i]->accountId == $account->accountId)
-		$participantId = $i;
+		if($matchData->participantIdentities[$i]->player->accountId == $account->accountId){
+			$participantId = $i;
+			break;
+		}
 	}
 
 	//MOVES THE MATCHDATA ARRAY INTO IT'S OWN VARABLE. BREAKING UP THE ARRAY
-	//THIS SECTION WORKS IN PULLING THE CORRECT GAME STATS INTO $playerMatchData. -Matt
 	$playerMatchData = $matchData->participants[$participantId];
 
 	//places each champion id in predefined array
-	//THIS IS PULLING THE CORRECT CHAMPION IDS. - Matt
 	$champIdNumArr[$j]=$playerMatchData->championId;
-}
+	
+}//print_r($playerMatchData);
 
 //finds the 5 champions played most
 //initializations of variables
@@ -97,10 +98,11 @@ arsort($champsWithCounts);
 //stores the top five champions
 $topFiveChamps=array_slice($champsWithCounts, 0, 5, true);
 
-for($i=0; $i<5; $i++){
+foreach($topFiveChamps as $champ=>$gamesPlayed){
 	//print_r("$topFiveChamps[$i]<br>");
-	$champion = $api->getStaticChampion($topFiveChamps[$i], true);
+	$champion = $api->getStaticChampion($champ, true);
 	print_r($champion->name);
+	echo "Games Played: ". $gamesPlayed;
 	print("<br>");
 
 }

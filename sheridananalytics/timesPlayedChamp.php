@@ -42,7 +42,7 @@ for ($j=0; $j<51; $j++){
 
 	for($i=0; $i<10; $i++){
 		if($participant[$i]->accountId == $account->accountId)
-		$participantId = $i;
+			$participantId = $i;
 	}
 
 	//MOVES THE MATCHDATA ARRAY INTO IT'S OWN VARABLE. BREAKING UP THE ARRAY
