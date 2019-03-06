@@ -12,15 +12,24 @@ use RiotAPI\DataDragonAPI\Definitions\Map;
 DataDragonAPI::initByCdn();
 //EVAN'S CALLBACK CODE dWUxOnl1Yjh0eWJGYjF0RndrX3FwVEVwVHcuYXloaWlsT1NULXFXM1Z5WkNXaXd3dw%3D%3D
 //  Initialize the library
-$api = new LeagueAPI([ //RGAPI-b1c70cf8-1118-4467-946d-1ff43b3dd95d  RGAPI-1304059b-a95f-4262-b3db-252b8e2ba157
+$api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-b1c70cf8-1118-4467-946d-1ff43b3dd95d',
+	LeagueAPI::SET_KEY    => 'RGAPI-1304059b-a95f-4262-b3db-252b8e2ba157',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
 $summonerName = "scottlu"; //HARDCODED SUMMONER NAME
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
+
+//needed initializations
+$matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
+foreach($matchlistSolo->matches as $game){
+	if($game->lane == 'MID'){
+		$gameIds[] = $game->gameId;
+		$gameChampId[] = $game->champion;
+	}
+}
 
 //initilizations
 $champIdNumArr = array_fill(0, 100, -1); //champ id array
@@ -29,25 +38,16 @@ $champIdNumArr = array_fill(0, 100, -1); //champ id array
 $checked010=false;
 $checked1020=false;
 $checked2030=false;
-
-//needed initializations
-$matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
-foreach($matchlistSolo->matches as $game){
-	$gameIds[] = $game->gameId;
-	//$gameChampId[] = $game->champion;
-}
-
-//LOGIC
-
 //finds the champ ids for most recent 100 games. Currently only pulls the most recent games due to error if try with 100
 for ($j=0; $j<51; $j++){
-
 	$matchData = $api->getMatch($gameIds[$j]);
+	foreach($matchData->participantIdentities as $participantIds){
+		$participant[] = $participantIds->player;
+	}
+
 	for($i=0; $i<10; $i++){
-		if($matchData->participantIdentities[$i]->player->accountId == $account->accountId){
+		if($participant[$i]->accountId == $account->accountId)
 			$participantId = $i;
-			break;
-		}
 	}
 
 	//MOVES THE MATCHDATA ARRAY INTO IT'S OWN VARABLE. BREAKING UP THE ARRAY
@@ -99,9 +99,10 @@ for ($j=0; $j<51; $j++){
 //initializations of variables
 $gamesPlayed=1;
 $champStats;
+$indexCounterLoop=0; //keeps track of index for $champStats o we dont skip when we find duplicates
 //iterates through champ id array and stores times champ is played
 for ($i=0;$i<sizeof($champIdNumArr);$i++){
-	$found=1;
+
 	//if champ id hasnt been checked yet, check it.
 	if($champIdNumArr[$i]!=-1){
 		$champIdNum=$champIdNumArr[$i];
@@ -151,19 +152,19 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 			}
 		}
 		//Stores the times played (values) with thier respective champions (keys) in an associative array.
-		$champsWithCounts[$champIdNumArr[$i]] = $gamesPlayed;
+		$champsWithCounts[$champIdNum] = $gamesPlayed;
 
 		$indexCounter=1;// Keeps track of what index were at for deltas
-		//store stats for each champ
-		$champStats[$i][0]= $champIdNum;
-		$champStats[$i][1]=array('Statistic' => "Average Gold",'Value' => $avrgGold/$gamesPlayed);
-		$champStats[$i][2]=array('Statistic' =>"Average Game time (m)" , 'Value'=>$avrgGameTime/$gamesPlayed);
-		$champStats[$i][3]=array('Statistic' =>"Average Champion lvl" ,'Value'=>$avrgChampLvl/$gamesPlayed );
-		$champStats[$i][4]=array('Statistic' => "Win/Loss Rate (%)", 'Value'=>($winRate/$gamesPlayed)*100);
-		$champStats[$i][5]=array('Statistic' => "Average amount of Wards Placed",'Value'=>$avrgWardsPlaced/$gamesPlayed );
-		$champStats[$i][6]=array('Statistic' => "Average KDA",'Value'=>$avrgKDA/$gamesPlayed );
-		$champStats[$i][7]=array('Statistic' => "Average First Blood (%)",'Value'=>($avrgFirstblood/$gamesPlayed)*100 );
-		$champStats[$i][8]=array('Statistic' => "Average Damage Dealt to Champs", 'Value'=>$avrgddtc/$gamesPlayed);
+		//store stats for each champ.
+		$champStats[$indexCounterLoop][0]=$champIdNum;
+		$champStats[$indexCounterLoop][1]=array('Statistic' => "Average Gold",'Value' => $avrgGold/$gamesPlayed);
+		$champStats[$indexCounterLoop][2]=array('Statistic' =>"Average Game time (m)" , 'Value'=>$avrgGameTime/$gamesPlayed);
+		$champStats[$indexCounterLoop][3]=array('Statistic' =>"Average Champion lvl" ,'Value'=>$avrgChampLvl/$gamesPlayed );
+		$champStats[$indexCounterLoop][4]=array('Statistic' => "Win/Loss Rate (%)", 'Value'=>($winRate/$gamesPlayed)*100);
+		$champStats[$indexCounterLoop][5]=array('Statistic' => "Average amount of Wards Placed",'Value'=>$avrgWardsPlaced/$gamesPlayed );
+		$champStats[$indexCounterLoop][6]=array('Statistic' => "Average KDA",'Value'=>$avrgKDA/$gamesPlayed );
+		$champStats[$indexCounterLoop][7]=array('Statistic' => "Average First Blood (%)",'Value'=>($avrgFirstblood/$gamesPlayed)*100 );
+		$champStats[$indexCounterLoop][8]=array('Statistic' => "Average Damage Dealt to Champs", 'Value'=>$avrgddtc/$gamesPlayed);
 		/*
 		if($checked010){
 			$champStats[$i][8+$indexCounter]=array('Statistic' =>" Average CS delta for 0-10 (m)" , 'Value'=>$avrgCSDelta010 );
@@ -178,26 +179,25 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 	  }*/
 		//reset games played before iterates again
 		$gamesPlayed=1;
+		$indexCounterLoop++;
 	}
 }
+/*
 //for testing purposes
-for($a = 0; $a < 5; $a++) {
+for($a = 0; $a <= $indexCounterLoop-1; $a++) {
 	// b goes up to how many stats we have
   for($b = 0; $b <= 8; $b++) {
     if($b==0){
 			echo "Champ: ".$champStats[$a][0]."<br>";
 		}
 		else {
-
-       //foreach ($champStats[$a][$b] as $key => $value) {
-       	//echo $key.": ".$value."<br>";
-			print_r($champStats[$a][$b]);
-			echo "<br>";
-       //}
-		}
+       foreach ($champStats[$a][$b] as $key => $value) {
+       	echo $key.": ".$value."<br>";
+       }
+			}
 		}
 		echo "<br>";
-}
+}*/
 //sorts the associative array in descending order with respect to the values.
 arsort($champsWithCounts);
 
