@@ -200,7 +200,6 @@ $fifthChampsStats=[];			//stores all information for the champ in fifth place.
 //iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
 for ($i=0; $i <sizeof($champStats); $i++) {
 	foreach ($champStats[$i][0] as $array=> $champion) {
-	 //for champion its checking both statistic andd value, add a way to check value only.
 		foreach ($topFiveChamps as $topFive => $value) {
 			if($topFive==$champion){
 				//adds the placement of the champion to the array
