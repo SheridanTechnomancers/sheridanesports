@@ -128,14 +128,14 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 			if($champIdNum== $champIdNumArr[$j]){
 				$gamesPlayed++;
 				//average out the stats over the games played.
-				$avrgGold=($avrgGold+$goldEarnedArr[$j])/$gamesPlayed;
-				$avrgGameTime=($avrgGameTime+$gameTimeMArr[$j])/$gamesPlayed;
-				$avrgChampLvl=($avrgChampLvl+$champLvlArr[$j])/$gamesPlayed;
-				$winRate=(($winRate+$winLossArr[$j])/$gamesPlayed)*100;
-				$avrgWardsPlaced=($avrgWardsPlaced+$wardsPlacedArr[$j])/$gamesPlayed;
-				$avrgKDA=($avrgKDA+$kdaArr[$j])/$gamesPlayed;
-				$avrgFirstblood=(($avrgFirstblood+$firstBloodArr[$j])/$gamesPlayed)*100;
-				$avrgddtc=($avrgddtc+$ddtcArr[$j])/$gamesPlayed;
+				$avrgGold+=$goldEarnedArr[$j];
+				$avrgGameTime+=$gameTimeMArr[$j];
+				$avrgChampLvl+=$champLvlArr[$j];
+				$winRate+=$winLossArr[$j];
+				$avrgWardsPlaced+=$wardsPlacedArr[$j];
+				$avrgKDA+=$kdaArr[$j];
+				$avrgFirstblood+=$firstBloodArr[$j];
+				$avrgddtc+=$ddtcArr[$j];
 				/*
 				//add condition if index exists,currently not checked
 				if($checked010){
@@ -157,14 +157,14 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		$indexCounter=1;// Keeps track of what index were at for deltas
 		//store stats for each champ
 		$champStats[$i][0]=$champIdNum;
-		$champStats[$i][1]=array('Statistic' => "Average Gold",'Value' => $avrgGold);
-		$champStats[$i][2]=array('Statistic' =>"Average Game time (m)" , 'Value'=>$avrgGameTime);
-		$champStats[$i][3]=array('Statistic' =>"Average Champion lvl" ,'Value'=>$avrgChampLvl );
-		$champStats[$i][4]=array('Statistic' => "Win/Loss Rate (%)", 'Value'=>$winRate);
-		$champStats[$i][5]=array('Statistic' => "Average amount of Wards Placed",'Value'=>$avrgWardsPlaced );
-		$champStats[$i][6]=array('Statistic' => "Average KDA",'Value'=>$avrgKDA );
-		$champStats[$i][7]=array('Statistic' => "Average First Blood (%)",'Value'=>$avrgFirstblood );
-		$champStats[$i][8]=array('Statistic' => "Average Damage Dealt to Champs", 'Value'=>$avrgddtc);
+		$champStats[$i][1]=array('Statistic' => "Average Gold",'Value' => $avrgGold/$gamesPlayed);
+		$champStats[$i][2]=array('Statistic' =>"Average Game time (m)" , 'Value'=>$avrgGameTime/$gamesPlayed);
+		$champStats[$i][3]=array('Statistic' =>"Average Champion lvl" ,'Value'=>$avrgChampLvl/$gamesPlayed );
+		$champStats[$i][4]=array('Statistic' => "Win/Loss Rate (%)", 'Value'=>($winRate/$gamesPlayed)*100);
+		$champStats[$i][5]=array('Statistic' => "Average amount of Wards Placed",'Value'=>$avrgWardsPlaced/$gamesPlayed );
+		$champStats[$i][6]=array('Statistic' => "Average KDA",'Value'=>$avrgKDA/$gamesPlayed );
+		$champStats[$i][7]=array('Statistic' => "Average First Blood (%)",'Value'=>($avrgFirstblood/$gamesPlayed)*100 );
+		$champStats[$i][8]=array('Statistic' => "Average Damage Dealt to Champs", 'Value'=>$avrgddtc/$gamesPlayed);
 		/*
 		if($checked010){
 			$champStats[$i][8+$indexCounter]=array('Statistic' =>" Average CS delta for 0-10 (m)" , 'Value'=>$avrgCSDelta010 );
@@ -181,8 +181,8 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		$gamesPlayed=1;
 	}
 }
-/* for testing purposes
-for($a = 0; $a <= 5; $a++) {
+//for testing purposes
+for($a = 0; $a <= sizeof($champStats); $a++) {
 	// b goes up to how many stats we have
   for($b = 0; $b <= 8; $b++) {
     if($b==0){
@@ -195,14 +195,14 @@ for($a = 0; $a <= 5; $a++) {
 			}
 		}
 		echo "<br>";
-  }
-*/
+}
 //sorts the associative array in descending order with respect to the values.
 arsort($champsWithCounts);
 
 //stores the top five champions
 $topFiveChamps=array_slice($champsWithCounts, 0, 5, true);
 
+/*
 //still working on this part.
 $champ=1;
 $firstChampsStats=[];
@@ -279,5 +279,5 @@ foreach ($fourthChampsStats as $key => $value) {
 foreach ($fifthChampsStats as $key => $value) {
 	echo $key.": ".$value;
   echo "<br>";
-}
+}*/
 ?>
