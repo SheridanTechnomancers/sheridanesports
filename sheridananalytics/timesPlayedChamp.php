@@ -12,24 +12,15 @@ use RiotAPI\DataDragonAPI\Definitions\Map;
 DataDragonAPI::initByCdn();
 //EVAN'S CALLBACK CODE dWUxOnl1Yjh0eWJGYjF0RndrX3FwVEVwVHcuYXloaWlsT1NULXFXM1Z5WkNXaXd3dw%3D%3D
 //  Initialize the library
-$api = new LeagueAPI([
+$api = new LeagueAPI([ //RGAPI-b1c70cf8-1118-4467-946d-1ff43b3dd95d  RGAPI-1304059b-a95f-4262-b3db-252b8e2ba157
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-1304059b-a95f-4262-b3db-252b8e2ba157',
+	LeagueAPI::SET_KEY    => 'RGAPI-b1c70cf8-1118-4467-946d-1ff43b3dd95d',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
 $summonerName = "scottlu"; //HARDCODED SUMMONER NAME
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
-
-//needed initializations
-$matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
-foreach($matchlistSolo->matches as $game){
-	if($game->lane == 'MID'){
-		$gameIds[] = $game->gameId;
-		$gameChampId[] = $game->champion;
-	}
-}
 
 //initilizations
 $champIdNumArr = array_fill(0, 100, -1); //champ id array
@@ -38,16 +29,25 @@ $champIdNumArr = array_fill(0, 100, -1); //champ id array
 $checked010=false;
 $checked1020=false;
 $checked2030=false;
+
+//needed initializations
+$matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
+foreach($matchlistSolo->matches as $game){
+	$gameIds[] = $game->gameId;
+	//$gameChampId[] = $game->champion;
+}
+
+//LOGIC
+
 //finds the champ ids for most recent 100 games. Currently only pulls the most recent games due to error if try with 100
 for ($j=0; $j<51; $j++){
-	$matchData = $api->getMatch($gameIds[$j]);
-	foreach($matchData->participantIdentities as $participantIds){
-		$participant[] = $participantIds->player;
-	}
 
+	$matchData = $api->getMatch($gameIds[$j]);
 	for($i=0; $i<10; $i++){
-		if($participant[$i]->accountId == $account->accountId)
+		if($matchData->participantIdentities[$i]->player->accountId == $account->accountId){
 			$participantId = $i;
+			break;
+		}
 	}
 
 	//MOVES THE MATCHDATA ARRAY INTO IT'S OWN VARABLE. BREAKING UP THE ARRAY
@@ -153,10 +153,9 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		//Stores the times played (values) with thier respective champions (keys) in an associative array.
 		$champsWithCounts[$champIdNumArr[$i]] = $gamesPlayed;
 
-
 		$indexCounter=1;// Keeps track of what index were at for deltas
 		//store stats for each champ
-		$champStats[$i][0]=$champIdNum;
+		$champStats[$i][0]= $champIdNum;
 		$champStats[$i][1]=array('Statistic' => "Average Gold",'Value' => $avrgGold/$gamesPlayed);
 		$champStats[$i][2]=array('Statistic' =>"Average Game time (m)" , 'Value'=>$avrgGameTime/$gamesPlayed);
 		$champStats[$i][3]=array('Statistic' =>"Average Champion lvl" ,'Value'=>$avrgChampLvl/$gamesPlayed );
@@ -182,17 +181,20 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 	}
 }
 //for testing purposes
-for($a = 0; $a <= sizeof($champStats); $a++) {
+for($a = 0; $a < 5; $a++) {
 	// b goes up to how many stats we have
   for($b = 0; $b <= 8; $b++) {
     if($b==0){
 			echo "Champ: ".$champStats[$a][0]."<br>";
 		}
 		else {
-       foreach ($champStats[$a][$b] as $key => $value) {
-       	echo $key.": ".$value."<br>";
-       }
-			}
+
+       //foreach ($champStats[$a][$b] as $key => $value) {
+       	//echo $key.": ".$value."<br>";
+			print_r($champStats[$a][$b]);
+			echo "<br>";
+       //}
+		}
 		}
 		echo "<br>";
 }

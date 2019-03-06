@@ -21,7 +21,7 @@ DataDragonAPI::initByCdn();
 //  Initialize the library //    RGAPI-ee10da3e-3e8c-4d6c-87ea-1e48bafa9d77
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-ee10da3e-3e8c-4d6c-87ea-1e48bafa9d77',
+	LeagueAPI::SET_KEY    => 'RGAPI-b1c70cf8-1118-4467-946d-1ff43b3dd95d',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
@@ -59,6 +59,7 @@ for ($j=0; $j<50; $j++){
 
 	//places each champion id in predefined array
 	$champIdNumArr[$j]=$playerMatchData->championId;
+
 	
 }//print_r($playerMatchData);
 
@@ -85,6 +86,7 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 			if($champIdNum== $champIdNumArr[$j]){
 				$gamesPlayed++; //NEEDS TO STORE EXACT AMOUNTS FOR EACH CHAMP ID
 				$champIdNumArr[$j]=-1;
+				
 			}
 		}
 		//Stores the times played (value) with thier respective champion id (key) in an associative array.
