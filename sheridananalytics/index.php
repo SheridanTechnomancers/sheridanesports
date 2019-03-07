@@ -1,4 +1,4 @@
-<form method="post" action="testM<ain.php/" id="uform">
+<form method="post" action="testMain.php/" id="uform">
 <p>
     <label for="uname">Username: </label>
     <input type="text" name="uname" id="uname"/>
