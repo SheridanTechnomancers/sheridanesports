@@ -10,7 +10,6 @@ use RiotAPI\DataDragonAPI\DataDragonAPI;
 use RiotAPI\DataDragonAPI\Definitions\Map;
 
 DataDragonAPI::initByCdn();
-//EVAN'S CALLBACK CODE dWUxOnl1Yjh0eWJGYjF0RndrX3FwVEVwVHcuYXloaWlsT1NULXFXM1Z5WkNXaXd3dw%3D%3D
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
