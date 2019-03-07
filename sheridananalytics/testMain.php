@@ -4,6 +4,8 @@
 	ONLY PASS THE AVERAGES OF EACH CHAMP. NOTHING GAME DATA WISE
 -->
 <?php
+session_start();
+
 
 //  Include all required files
 require_once __DIR__  . "/../dependencies/vendor/autoload.php";
@@ -48,11 +50,11 @@ $checked1020 	= false;
 $checked2030 	= false;
 
 $champ 				= 1;		//keeps track of what placement the champ were looking at is on the list of top five.
-$firstChampsStats 	= [];		//stores all information for the champ in first place.
-$secondChampsStats 	= [];		//stores all information for the champ in second place.
-$thirdChampsStats 	= [];		//stores all information for the champ in third place.
-$fourthChampsStats	= [];		//stores all information for the champ in fourth place.
-$fifthChampsStats	= [];		//stores all information for the champ in fifth place.
+$firstChampStats 	= [];		//stores all information for the champ in first place.
+$secondChampStats 	= [];		//stores all information for the champ in second place.
+$thirdChampStats 	= [];		//stores all information for the champ in third place.
+$fourthChampStats	= [];		//stores all information for the champ in fourth place.
+$fifthChampStats	= [];		//stores all information for the champ in fifth place.
 //iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
 
 foreach($matchlistSolo->matches as $game){
@@ -244,37 +246,37 @@ for ($i = 0; $i <sizeof($champStats); $i++) {
 			if($topFive == $champion){
 				//adds the placement of the champion to the array
 				if($champ == 1){
-						$firstChampsStats['Placement'] = 'First';
+						$firstChampStats['Placement'] = 'First';
 					}
 					else if($champ == 2){
-						$secondChampsStats['Placement'] = 'Second';
+						$secondChampStats['Placement'] = 'Second';
 					}
 					else if($champ == 3){
-						$thirdChampsStats['Placement'] = 'Third';
+						$thirdChampStats['Placement'] = 'Third';
 					}
 					else if($champ == 4){
-						$fourthChampsStats['Placement'] = 'Fourth';
+						$fourthChampStats['Placement'] = 'Fourth';
 					}
 					else{
-						$fifthChampsStats['Placement'] = 'Fifth';
+						$fifthChampStats['Placement'] = 'Fifth';
 					}
 				//adds the rest of their stats to thier respective array
 				for ($j = 0; $j <count($champStats[$i]); $j++) {
 					foreach ($champStats[$i][$j] as $statistic => $number) {
 						if($champ == 1){
-								$firstChampsStats[$statistic] = $number;
+								$firstChampStats[$statistic] = $number;
 						}
 						else if($champ == 2){
-							$secondChampsStats[$statistic] = $number;
+							$secondChampStats[$statistic] = $number;
 						}
 						else if($champ == 3){
-							$thirdChampsStats[$statistic] = $number;
+							$thirdChampStats[$statistic] = $number;
 						}
 						else if($champ == 4){
-							$fourthChampsStats[$statistic] = $number;
+							$fourthChampStats[$statistic] = $number;
 						}
 						else{
-							$fifthChampsStats[$statistic] = $number;
+							$fifthChampStats[$statistic] = $number;
 						}
 					}
 				}
@@ -283,40 +285,57 @@ for ($i = 0; $i <sizeof($champStats); $i++) {
 		}
 	}
 }
+$champ1 = $api->getStaticChampion($firstChampStats['champId'], true);
+$champ2 = $api->getStaticChampion($secondChampStats['champId'], true);
+$champ3 = $api->getStaticChampion($thirdChampStats['champId'], true);
+$champ4 = $api->getStaticChampion($fourthChampStats['champId'], true);
+$champ5 = $api->getStaticChampion($fifthChampStats['champId'], true);
+
+$champNameArr[0] = $champ1->name;
+$champNameArr[1] = $champ2->name;
+$champNameArr[2] = $champ3->name;
+$champNameArr[3] = $champ4->name;
+$champNameArr[4] = $champ5->name;
+
+
+$_SESSION['firstChamp']	 	= $firstChampStats;
+$_SESSION['secondChamp']	= $secondChampStats;
+$_SESSION['thirdChamp']		= $thirdChampStats;
+$_SESSION['fourthChamp'] 	= $fourthChampStats;
+$_SESSION['fifthChamp'] 	= $fifthChampStats;
+$_SESSION['champName']		= $champNameArr;
+$_SESSION['uname']			= $summonerName;
+
+
 //$champion = $api->getStaticChampion($playerMatchData->championId, true); 
-$champ1 = $api->getStaticChampion($firstChampsStats['champId'], true);
-$champ2 = $api->getStaticChampion($secondChampsStats['champId'], true);
-$champ3 = $api->getStaticChampion($thirdChampsStats['champId'], true);
-$champ4 = $api->getStaticChampion($fourthChampsStats['champId'], true);
-$champ5 = $api->getStaticChampion($fifthChampsStats['champId'], true);
-$champ1Name = $champ1->name;
+/*$champ1Name = $champ1->name;
 $champ2Name = $champ2->name;
 $champ3Name = $champ3->name;
 $champ4Name = $champ4->name;
 $champ5Name = $champ5->name;
 print($champ1Name);
 echo "<br>";
-print_r($firstChampsStats);
+print_r($firstChampStats);
 echo "<br>";
 echo "<br>";
 print($champ2Name);
 echo "<br>";
-print_r($secondChampsStats);
+print_r($secondChampStats);
 echo "<br>";
 echo "<br>";
 print($champ3Name);
 echo "<br>";
-print_r($thirdChampsStats);
+print_r($thirdChampStats);
 echo "<br>";
 echo "<br>";
 print($champ4Name);
 echo "<br>";
-print_r($fourthChampsStats);
+print_r($fourthChampStats);
 echo "<br>";
 echo "<br>";
 print($champ5Name);
 echo "<br>";
-print_r($fifthChampsStats);
+print_r($fifthChampStats);
 echo "<br>";
-echo "<br>";
+echo "<br>";*/
 ?>
