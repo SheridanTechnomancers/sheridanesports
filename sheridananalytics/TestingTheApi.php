@@ -13,7 +13,7 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-ee10da3e-3e8c-4d6c-87ea-1e48bafa9d77',
+	LeagueAPI::SET_KEY    => 'RGAPI-b1c70cf8-1118-4467-946d-1ff43b3dd95d',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
@@ -45,6 +45,7 @@ $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summo
 $matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
 //$matchlistSolo = $api->getMatchListByAccount($account->accountId, 440);
 
+//print_r($matchlistSolo);
 /* WHAT YOU CAN GET FROM THE ARRAY
 * print_r($matchlistSolo);		//PRINT THE ARRAY 
 * $matchlistSolo->totalGames; 	//TOTAL GAMES PLAYED
@@ -61,7 +62,7 @@ foreach($matchlistSolo->matches as $game){
 	$gameIds[] = $game->gameId;
 	$gameChampId[] = $game->champion; 
 }
-
+//print_r($matchlistSolo);
 
 /* WHAT YOU CAN GET FROM THE ARRAY
 * $game->lane;		//LANE PLAYED
@@ -82,8 +83,9 @@ foreach($matchlistSolo->matches as $game){
 * For now just gather ALL 100 games and compile them together 
 */
 
-$matchData = $api->getMatch($gameIds[0]);
-print_r($matchData->participantIdentities[0]->player->accountId);
+$matchData = $api->getMatch($gameIds[27]);
+//print_r($matchData->participantIdentities[0]->player->accountId);
+print_r($matchData);
 /*WHAT COMES OUT OF THE ARRAY 
 * print_r($matchData);		//PRINTING THE MATCH DATA ARRAY 
 * $matchData->seasonId		//SEASONID 
@@ -405,7 +407,7 @@ for($i=0; $i<100; $i++)														//STORING 100 LATEST GAMES
 //}
 
 
-
+/*
 
 //PRINT VALUES
 //SUMMONER NAME 
@@ -467,7 +469,7 @@ print "Vision Wards Bought : $visionBought <br>";
 print "Wards Placed: $wardsPlaced<br>";
 
 //DAMAGE STUFF 
-print "Damage Dealt to Champs: $ddtc <br>";
+print "Damage Dealt to Champs: $ddtc <br>";*/
 
 
 ?>
