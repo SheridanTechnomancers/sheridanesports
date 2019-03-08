@@ -53,7 +53,6 @@ for ($j=0; $j<51; $j++){
 	$champIdNumArr[$j]=$playerMatchData->championId;
 
   //stores stats per game for each champ
-	$gameTime		= floor(($matchData->gameDuration));					//TOTAL GAME TIME
 	$goldEarnedArr[$j]= $playerMatchData->stats->goldEarned; 					//GOLD EARNED
 	$gameTimeArr[$j]= floor(($matchData->gameDuration));				//TOTAL MINUTES GAME TIME
 	$winLossArr[$j]=$playerMatchData->stats->win; 										//Win/Loss , win =1 and loss=0
@@ -70,13 +69,13 @@ for ($j=0; $j<51; $j++){
 	$ddtcArr[$j]= $playerMatchData->stats->totalDamageDealtToChampions;		//TOTAL DAMAGE DEALT TO CHAMPS
 
 	//CS DELTAs, only added if game time is high enough.
-	if(($gameTime/60%60)>=10){
+	if(($gameTimeArr[$j]/60%60)>=10){
 		$csDelta010Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['0-10'];	//CS DELTA FOR MINUTES 0-10;
 	}
-	if(($gameTime/60%60)>=20){
+	if(($gameTimeArr[$j]/60%60)>=20){
 		$csDelta1020Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['10-20'];	//CS DELTA FOR MINUTES 10-20
 	}
-	if(($gameTime/60%60)>=30){
+	if(($gameTimeArr[$j]/60%60)>=30){
 	$csDelta2030Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['20-30'];	//CS DELTA FOR MINUTES 20-30
   }
 }
@@ -186,12 +185,21 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		$indexCounterLoop++; //increase loopcounter before iteration
 	}
 }
-
+/*testing statement
+foreach ($champsWithCounts as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}*/
 //sorts the associative array $champsWithCounts in descending order with respect to the values.
 arsort($champsWithCounts);
 
 //stores the top five champions from $champsWithCounts
 $topFiveChamps=array_slice($champsWithCounts, 0, 5, true);
+/*
+foreach ($topFiveChamps as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}*/
 
 //stores top five champs STATS in thier respective arrays.
 //Initialization
@@ -202,9 +210,10 @@ $thirdChampsStats=[];			//stores all information for the champ in third place.
 $fourthChampsStats=[];		//stores all information for the champ in fourth place.
 $fifthChampsStats=[];			//stores all information for the champ in fifth place.
 //iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
-for ($i=0; $i <sizeof($champStats); $i++) {
-	foreach ($champStats[$i][0] as $array=> $champion) {
-		foreach ($topFiveChamps as $topFive => $value) {
+
+foreach ($topFiveChamps as $topFive => $value) {
+	for ($i=0; $i <sizeof($champStats); $i++){
+		foreach ($champStats[$i][0] as $array=> $champion) {
 			if($topFive==$champion){
 				//adds the placement of the champion to the array
 				if($champ==1){
@@ -248,7 +257,7 @@ for ($i=0; $i <sizeof($champStats); $i++) {
 	}
 }
 
-/*PRINT STATEMENTS FOR TESTING
+//PRINT STATEMENTS FOR TESTING
 foreach ($firstChampsStats as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
@@ -272,5 +281,5 @@ echo "<br>";
 foreach ($fifthChampsStats as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
-}*/
+}
 ?>
