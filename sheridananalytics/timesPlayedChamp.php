@@ -14,7 +14,7 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-f9007f1f-cef0-43c4-b7b4-7016b6d9d3b1',
+	LeagueAPI::SET_KEY    => 'RGAPI-7cf16359-d697-4b3f-ab4f-678be3153176',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
@@ -53,36 +53,30 @@ for ($j=0; $j<51; $j++){
 	$champIdNumArr[$j]=$playerMatchData->championId;
 
   //stores stats per game for each champ
-	$gameTimeM		= floor(($matchData->gameDuration)/60%60);					//TOTAL MINUTES GAME TIME
+	$gameTime		= floor(($matchData->gameDuration));					//TOTAL GAME TIME
 	$goldEarnedArr[$j]= $playerMatchData->stats->goldEarned; 					//GOLD EARNED
-	$gameTimeMArr[$j]= floor(($matchData->gameDuration)/60%60);				//TOTAL MINUTES GAME TIME
+	$gameTimeArr[$j]= floor(($matchData->gameDuration));				//TOTAL MINUTES GAME TIME
 	$winLossArr[$j]=$playerMatchData->stats->win; 										//Win/Loss , win =1 and loss=0
 	$wardsPlacedArr[$j]	= $playerMatchData->stats->wardsPlaced;				//WARDS PLACED
 
 	//KDA determination
-	$kills 			= $playerMatchData->stats->kills; 							//KILLS
-	$assists 		= $playerMatchData->stats->assists; 						//ASSIST
-	$deaths 		= $playerMatchData->stats->deaths; 							//DEATHS
-	//CALCULATING KDA
-	if($deaths == 0) 															//IF THERE'S NO DEATHS
-		$kda 		= $kills + $assists;										//KDA WITHOUT DEATHS
-	else 																		//IF DEATHS
-		$kda 		= $kills + $assists / $deaths; 								//KDA WITH DEATHS
-	//final KDA
-	$kdaArr[$j]=$kda;
+	//KDA determination
+	$killArr[$j] 		= $playerMatchData->stats->kills; 								//KILLS
+	$assistArr[$j] 		= $playerMatchData->stats->assists; 							//ASSIST
+	$deathArr[$j] 		= $playerMatchData->stats->deaths; 								//DEATHS
 
 	$champLvlArr[$j]	= $playerMatchData->stats->champLevel;							//CHAMPION LEVEL
 	$firstBloodArr[$j]=$playerMatchData->stats->firstBloodKill; 					//Got firstblood, yes=1 and no=0
 	$ddtcArr[$j]= $playerMatchData->stats->totalDamageDealtToChampions;		//TOTAL DAMAGE DEALT TO CHAMPS
 
 	//CS DELTAs, only added if game time is high enough.
-	if($gameTimeM>=10){
+	if(($gameTime/60%60)>=10){
 		$csDelta010Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['0-10'];	//CS DELTA FOR MINUTES 0-10;
 	}
-	if($gameTimeM>=20){
+	if(($gameTime/60%60)>=20){
 		$csDelta1020Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['10-20'];	//CS DELTA FOR MINUTES 10-20
 	}
-	if($gameTimeM>=30){
+	if(($gameTime/60%60)>=30){
 	$csDelta2030Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['20-30'];	//CS DELTA FOR MINUTES 20-30
   }
 }
@@ -103,11 +97,13 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 	if($champIdNumArr[$i]!=-1){
 		$champIdNum=$champIdNumArr[$i];
 		$avrgGold=$goldEarnedArr[$i];
-		$avrgGameTime=$gameTimeMArr[$i];
+		$avrgGameTime=$gameTimeArr[$i];
 		$avrgChampLvl=$champLvlArr[$i];
 		$winRate=$winLossArr[$i];
 		$avrgWardsPlaced=$wardsPlacedArr[$i];
-		$avrgKDA=$kdaArr[$i];
+		$avrgKills			= $killArr[$i];
+		$avrgAssists		= $assistArr[$i];
+		$avrgDeaths			= $deathArr[$i];
 		$avrgFirstblood=$firstBloodArr[$i];
 		$avrgddtc=$ddtcArr[$i];
 		//each CS delta checks if the element at that point exists, possibility it doesnt due to different game time.
@@ -130,21 +126,23 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 				$gamesPlayed++;
 				//adds the stats from those games to the original value.
 				$avrgGold+=$goldEarnedArr[$j];
-				$avrgGameTime+=$gameTimeMArr[$j];
+				$avrgGameTime+=$gameTimeArr[$j];
 				$avrgChampLvl+=$champLvlArr[$j];
 				$winRate+=$winLossArr[$j];
 				$avrgWardsPlaced+=$wardsPlacedArr[$j];
-				$avrgKDA+=$kdaArr[$j];
+				$avrgKills		+= $killArr[$j];
+				$avrgAssists	+= $assistArr[$j];
+				$avrgDeaths		+= $deathArr[$j];
 				$avrgFirstblood+=$firstBloodArr[$j];
 				$avrgddtc+=$ddtcArr[$j];
 				//again need to check that the element exists at that point.
-				if(isset($csDelta2030Arr[$j])){
+				if($checked010){
 					$avrgCSDelta010+=$csDelta010Arr[$j];
 				}
-				if(isset($csDelta2030Arr[$j])){
+				if($checked1020){
 					$avrgCSDelta1020+=$csDelta1020Arr[$j];
 				}
-				if(isset($csDelta2030Arr[$j])){
+				if($checked2030){
 					$avrgCSDelta2030+=$csDelta2030Arr[$j];
 				}
 				$champIdNumArr[$j]=-1; //change that id to -1 so we dont check it again.
@@ -156,26 +154,32 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 
 		$indexCounter=1; //needed for reset to 1 ech loop since each array is dynamic.
 		//store stats for each champ in a multidimensional array.
-		$champStats[$indexCounterLoop][0]=array('Champion Name'=>$champIdNum);
-		$champStats[$indexCounterLoop][1]=array('Average Gold'=> $avrgGold/$gamesPlayed);
-		$champStats[$indexCounterLoop][2]=array('Average Game time (m)'=>$avrgGameTime/$gamesPlayed);
-		$champStats[$indexCounterLoop][3]=array('Average Champion lvl'=>$avrgChampLvl/$gamesPlayed );
-		$champStats[$indexCounterLoop][4]=array('Win/Loss Rate (%)'=>($winRate/$gamesPlayed)*100);
-		$champStats[$indexCounterLoop][5]=array('Average amount of Wards Placed'=>$avrgWardsPlaced/$gamesPlayed );
-		$champStats[$indexCounterLoop][6]=array('Average KDA'=>$avrgKDA/$gamesPlayed );
-		$champStats[$indexCounterLoop][7]=array('Average First Blood (%)'=>($avrgFirstblood/$gamesPlayed)*100 );
-		$champStats[$indexCounterLoop][8]=array('Average Damage Dealt to Champs'=>$avrgddtc/$gamesPlayed);
+		$champStats[$indexCounterLoop][0]	= array('champId'		=> $champIdNum);
+		$champStats[$indexCounterLoop][1]	= array('gold'			=> $avrgGold/$gamesPlayed);
+		$champStats[$indexCounterLoop][2]	= array('gameTimeH'		=> ($avrgGameTime/$gamesPlayed)/3600%24);
+		$champStats[$indexCounterLoop][3]	= array('gameTimeM'		=> ($avrgGameTime/$gamesPlayed)/60%60);
+		$champStats[$indexCounterLoop][4]	= array('gameTimeS'		=> ($avrgGameTime/$gamesPlayed)%60);
+		$champStats[$indexCounterLoop][5]	= array('level'			=> $avrgChampLvl/$gamesPlayed);
+		$champStats[$indexCounterLoop][6]	= array('winRatio'		=> ($winRate/$gamesPlayed)*100);
+		$champStats[$indexCounterLoop][7]	= array('wardsPlaced'	=> $avrgWardsPlaced/$gamesPlayed);
+		$champStats[$indexCounterLoop][8]	= array('kills'			=> $avrgKills/$gamesPlayed);
+		$champStats[$indexCounterLoop][9]	= array('deaths'		=> $avrgDeaths/$gamesPlayed);
+		$champStats[$indexCounterLoop][10]	= array('assists'		=> $avrgAssists/$gamesPlayed);
+		$champStats[$indexCounterLoop][11]	= array('kda'			=> ($avrgKills+$avrgAssists)/$avrgDeaths);
+		$champStats[$indexCounterLoop][12]	= array('firstBlood'	=> ($avrgFirstblood/$gamesPlayed)*100 );
+		$champStats[$indexCounterLoop][13]	= array('damageDealt'	=> $avrgddtc/$gamesPlayed);
+		$champStats[$indexCounterLoop][14]	= array('gamesPlayed'	=> $gamesPlayed);
 
 		if($checked010){
-			$champStats[$indexCounterLoop][8+$indexCounter]=array('Average CS delta for 0-10 (m)'=>$avrgCSDelta010/$gamesPlayed );
+			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 0-10 (m)'=>$avrgCSDelta010/$gamesPlayed );
 			$indexCounter++;
 	  }
 		if($checked1020){
-			$champStats[$indexCounterLoop][8+$indexCounter]=array('Average CS delta for 10-20 (m)'=>$avrgCSDelta1020/$gamesPlayed);
+			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 10-20 (m)'=>$avrgCSDelta1020/$gamesPlayed);
 			$indexCounter++;
 		}
 		if($checked2030){
-			$champStats[$indexCounterLoop][8+$indexCounter]=array('Average CS delta for 20-30 (m)'=>$avrgCSDelta2030/$gamesPlayed);
+			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 20-30 (m)'=>$avrgCSDelta2030/$gamesPlayed);
 	  }
 
 		$gamesPlayed=1; //reset games played before iterates again
@@ -243,4 +247,30 @@ for ($i=0; $i <sizeof($champStats); $i++) {
 		}
 	}
 }
+
+/*PRINT STATEMENTS FOR TESTING
+foreach ($firstChampsStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
+foreach ($secondChampsStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
+foreach ($thirdChampsStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
+foreach ($fourthChampsStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
+foreach ($fifthChampsStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}*/
 ?>
