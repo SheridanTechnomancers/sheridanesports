@@ -14,21 +14,21 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-7cf16359-d697-4b3f-ab4f-678be3153176',
+	LeagueAPI::SET_KEY    => 'RGAPI-b8c5ace1-d82a-460c-9502-8000ae256534',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = "scottlu"; //HARDCODED SUMMONER NAME
+$summonerName = $_POST['uname']; //HARDCODED SUMMONER NAME
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
 
 //needed initializations
 $matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
 foreach($matchlistSolo->matches as $game){
-	if($game->lane == 'MID'){
+
 		$gameIds[] = $game->gameId;
-		$gameChampId[] = $game->champion;
-	}
+		//$gameChampId[] = $game->champion;
+	
 }
 
 //initilizations
@@ -136,13 +136,13 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 				$avrgddtc+=$ddtcArr[$j];
 				//again need to check that the element exists at that point.
 				if($checked010){
-					$avrgCSDelta010+=$csDelta010Arr[$j];
+					$avrgCSDelta010+=$csDelta010Arr[$j-1];
 				}
 				if($checked1020){
-					$avrgCSDelta1020+=$csDelta1020Arr[$j];
+					$avrgCSDelta1020+=$csDelta1020Arr[$j-1];
 				}
 				if($checked2030){
-					$avrgCSDelta2030+=$csDelta2030Arr[$j];
+					$avrgCSDelta2030+=$csDelta2030Arr[$j-1];
 				}
 				$champIdNumArr[$j]=-1; //change that id to -1 so we dont check it again.
 			}
@@ -164,11 +164,16 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		$champStats[$indexCounterLoop][8]	= array('kills'			=> $avrgKills/$gamesPlayed);
 		$champStats[$indexCounterLoop][9]	= array('deaths'		=> $avrgDeaths/$gamesPlayed);
 		$champStats[$indexCounterLoop][10]	= array('assists'		=> $avrgAssists/$gamesPlayed);
-		$champStats[$indexCounterLoop][11]	= array('kda'			=> ($avrgKills+$avrgAssists)/$avrgDeaths);
-		$champStats[$indexCounterLoop][12]	= array('firstBlood'	=> ($avrgFirstblood/$gamesPlayed)*100 );
+		$champStats[$indexCounterLoop][12]	= array('firstBlood'	=> ($avrgFirstblood/$gamesPlayed)*100 ); //NOT WORKING
 		$champStats[$indexCounterLoop][13]	= array('damageDealt'	=> $avrgddtc/$gamesPlayed);
 		$champStats[$indexCounterLoop][14]	= array('gamesPlayed'	=> $gamesPlayed);
 
+		if($avrgDeaths == 0){
+			$champStats[$indexCounterLoop][11]	= array('kda'		=> $avrgKills+$avrgAssists);
+		}
+		elseif($avrgDeaths!=0){
+			$champStats[$indexCounterLoop][11]	= array('kda'		=> ($avrgKills+$avrgAssists)/$avrgDeaths);
+		}
 		if($checked010){
 			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 0-10 (m)'=>$avrgCSDelta010/$gamesPlayed );
 			$indexCounter++;

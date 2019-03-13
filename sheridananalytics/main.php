@@ -4,7 +4,6 @@
 	ONLY PASS THE AVERAGES OF EACH CHAMP. NOTHING GAME DATA WISE
 -->
 <?php
-session_start();
 
 
 //  Include all required files
@@ -17,123 +16,106 @@ use RiotAPI\LeagueAPI\Definitions\Region;
 use RiotAPI\DataDragonAPI\DataDragonAPI;
 use RiotAPI\DataDragonAPI\Definitions\Map;
 
-DataDragonAPI::initByCdn();
-//  Initialize the library //     RGAPI-7ef5b5db-0849-4571-84ac-ebc3d9fc5db7
-$api = new LeagueAPI([ 			
+DataDragonAPI::initByCdn(); 
+//EVAN'S CALLBACK CODE dWUxOnl1Yjh0eWJGYjF0RndrX3FwVEVwVHcuYXloaWlsT1NULXFXM1Z5WkNXaXd3dw%3D%3D
+//  Initialize the library
+$api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-7ef5b5db-0849-4571-84ac-ebc3d9fc5db7',
+	LeagueAPI::SET_KEY    => 'RGAPI-b8c5ace1-d82a-460c-9502-8000ae256534',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
 //TAKING THINGS FROM INDEX.PHP
-$summonerName = $_POST['uname'];		//USERNAME
+$summonerName 		= $_POST['uname'];		//USERNAME
+//print_r($_POST['uname']);
 //$ROLE = $_POST['role'];
-
-$account 			= $api->getSummonerByName($summonerName);
+$account 			= $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
 $matchlistSolo	 	= $api->getMatchListByAccount($account->accountId, 420);
-//champ id array
 $champIdNumArr	 	= array_fill(0, 100, -1);
-$avrgCSDelta2030	= 0;
-$avrgCSDelta010 	= 0;
-$avrgCSDelta1020	= 0;
-$avrgKda 			= 0;
-
 //initializations of variables
 $gamesPlayed		= 1;	//keeps track of games played
 $champStats;				//stores the stats for each champ in an array,initilized here so we can call it later.
 $indexCounter;			   	//stores the index of the second array (j loop),since array is dynamic due to cs deltas.
 $indexCounterLoop	= 0; 	//keeps track of index for $champStats (i loop), since array is dynamic due to duplicate champs.
 //keeps track of which deltas to add to $champStats.
-$checked010 	= false;
-$checked1020 	= false;
-$checked2030 	= false;
+$checked010 		= false;
+$checked1020 		= false;
+$checked2030 		= false;
 
-$champ 				= 1;		//keeps track of what placement the champ were looking at is on the list of top five.
-$firstChampStats 	= [];		//stores all information for the champ in first place.
-$secondChampStats 	= [];		//stores all information for the champ in second place.
-$thirdChampStats 	= [];		//stores all information for the champ in third place.
+//stores top five champs STATS in thier respective arrays.
+//Initialization
+$champ 				= 1; 		//keeps track of what placement the champ were looking at is on the list of top five.
+$firstChampStats	= [];		//stores all information for the champ in first place.
+$secondChampStats	= [];		//stores all information for the champ in second place.
+$thirdChampStats	= [];		//stores all information for the champ in third place.
 $fourthChampStats	= [];		//stores all information for the champ in fourth place.
 $fifthChampStats	= [];		//stores all information for the champ in fifth place.
 //iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
 
+
+//needed initializations
+$matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
 foreach($matchlistSolo->matches as $game){
-	$gameIds[] = $game->gameId;
-	//$gameChampId[] = $game->champion;
+		$gameIds[] = $game->gameId;
+		//$gameChampId[] = $game->champion;
 }
 
-//$matchData = $api->getMatch($gameIds[]);
-//print_r($matchData);
-
-//finds the champ ids for most recent 100 games. Currently only pulls te most recent games due to error if try witth 100
-for ($j = 0; $j < 50; $j++){
-
+//finds the champ ids for most recent 100 games. Currently only pulls the most recent games due to error if try with 100
+for ($j=0; $j<51; $j++){
 	$matchData = $api->getMatch($gameIds[$j]);
+	foreach($matchData->participantIdentities as $participantIds){
+		$participant[] = $participantIds->player;
+	}
 
-	for($i = 0; $i<10; $i++){
-		if($matchData->participantIdentities[$i]->player->accountId == $account->accountId){
+	for($i=0; $i<10; $i++){
+		if($participant[$i]->accountId == $account->accountId)
 			$participantId = $i;
-			break;
-		}
 	}
 
 	//MOVES THE MATCHDATA ARRAY INTO IT'S OWN VARABLE. BREAKING UP THE ARRAY
-	$playerMatchData 	= $matchData->participants[$participantId];
+	$playerMatchData = $matchData->participants[$participantId];
 
   //might need to use $gameChampId instead.
 	//places each champion id in predefined array
-	$champIdNumArr[$j]	= $playerMatchData->championId;
+	$champIdNumArr[$j] 	= $playerMatchData->championId;
 
   //stores stats per game for each champ
-	$gameTimeM			= floor(($matchData->gameDuration)/60%60);						//TOTAL MINUTES GAME TIME
-	$goldEarnedArr[$j]	= $playerMatchData->stats->goldEarned; 							//GOLD EARNED
-	$gameTimeMArr[$j]	= floor(($matchData->gameDuration));							//TOTAL MINUTES GAME TIME
-	$winLossArr[$j]		= $playerMatchData->stats->win; 								//Win/Loss , win =1 and loss=0
-	$wardsPlacedArr[$j]	= $playerMatchData->stats->wardsPlaced;							//WARDS PLACED
+	$goldEarnedArr[$j]	= $playerMatchData->stats->goldEarned;						//GOLD EARNED
+	$gameTimeArr[$j]	= $matchData->gameDuration;									//TOTAL MINUTES GAME TIME
+	$winLossArr[$j]		= $playerMatchData->stats->win; 							//Win/Loss , win =1 and loss=0
+	$wardsPlacedArr[$j]	= $playerMatchData->stats->wardsPlaced;						//WARDS PLACED
 
 	//KDA determination
-	$killArr[$j] 		= $playerMatchData->stats->kills; 								//KILLS
-	$assistArr[$j] 		= $playerMatchData->stats->assists; 							//ASSIST
-	$deathArr[$j] 		= $playerMatchData->stats->deaths; 								//DEATHS
+	//KDA determination
+	$killArr[$j] 		= $playerMatchData->stats->kills; 							//KILLS
+	$assistArr[$j] 		= $playerMatchData->stats->assists; 						//ASSIST
+	$deathArr[$j] 		= $playerMatchData->stats->deaths; 							//DEATHS
 
-	$champLvlArr[$j]	= $playerMatchData->stats->champLevel;							//CHAMPION LEVEL
-	$firstBloodArr[$j]	= $playerMatchData->stats->firstBloodKill; 						//Got firstblood, yes=1 and no=0
-	$ddtcArr[$j]		= $playerMatchData->stats->totalDamageDealtToChampions;			//TOTAL DAMAGE DEALT TO CHAMPS
+	$champLvlArr[$j]	= $playerMatchData->stats->champLevel;						//CHAMPION LEVEL
+	$firstBloodArr[$j]	= $playerMatchData->stats->firstBloodKill; 					//Got firstblood, yes=1 and no=0
+	$ddtcArr[$j]		= $playerMatchData->stats->totalDamageDealtToChampions;		//TOTAL DAMAGE DEALT TO CHAMPS
 
 	//CS DELTAs, only added if game time is high enough.
-	if($gameTimeM >= 10){
+	if(($gameTimeArr[$j]/60%60) >= 10){ // NEED TO BE DONE DIFFERENTLY 
 		$csDelta010Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['0-10'];	//CS DELTA FOR MINUTES 0-10;
 	}
-	if($gameTimeM >= 20){
+	if(($gameTimeArr[$j]/60%60) >= 20){
 		$csDelta1020Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['10-20'];	//CS DELTA FOR MINUTES 10-20
 	}
-	if($gameTimeM >= 30){
-		$csDelta2030Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['20-30'];	//CS DELTA FOR MINUTES 20-30
+	if(($gameTimeArr[$j]/60%60) >= 30){
+	$csDelta2030Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['20-30'];		//CS DELTA FOR MINUTES 20-30
   }
 }
 
-//calculates the times played for each champ as well as all their stats averaged over the games played with them.
 
-/*VARIABLES USED 
-*
-* $gamesPlayed
-* $champStats;	
-* $indexCounter;			   
-* $indexCounterLoop
-* //keeps track of which deltas to add to $champStats.
-* $checked010
-* $checked1020
-* $checked2030 	
-*/
-
-//finds the 5 champions played most
-//iterates through champ id array and stores times champ is played
-for ($i = 0; $i < sizeof($champIdNumArr); $i++){
+//iterates through champ id array and stores the games played with them in $champsWithCounts, also calculates stats and stores them in $champStats.
+for ($i=0;$i<sizeof($champIdNumArr);$i++){
 	//if champ id hasnt been checked yet, start calculation.
-	if($champIdNumArr[$i] !=- 1){
+	if($champIdNumArr[$i]!=-1){
 		$champIdNum 		= $champIdNumArr[$i];
 		$avrgGold			= $goldEarnedArr[$i];
-		$avrgGameTime		= $gameTimeMArr[$i];
+		$avrgGameTime		= $gameTimeArr[$i];
 		$avrgChampLvl		= $champLvlArr[$i];
 		$winRate			= $winLossArr[$i];
 		$avrgWardsPlaced	= $wardsPlacedArr[$i];
@@ -157,12 +139,12 @@ for ($i = 0; $i < sizeof($champIdNumArr); $i++){
 		}
 
 		//checks to see how many times the champions been played.
-		for($j = $i + 1; $j<sizeof($champIdNumArr) - $j; $j++){
+		for($j=$i+1;$j<sizeof($champIdNumArr)-$j;$j++){
 			if($champIdNum == $champIdNumArr[$j]){
 				$gamesPlayed++;
 				//adds the stats from those games to the original value.
 				$avrgGold		+= $goldEarnedArr[$j];
-				$avrgGameTime	+= $gameTimeMArr[$j];
+				$avrgGameTime	+= $gameTimeArr[$j];
 				$avrgChampLvl	+= $champLvlArr[$j];
 				$winRate		+= $winLossArr[$j];
 				$avrgWardsPlaced+= $wardsPlacedArr[$j];
@@ -172,14 +154,14 @@ for ($i = 0; $i < sizeof($champIdNumArr); $i++){
 				$avrgFirstblood	+= $firstBloodArr[$j];
 				$avrgddtc		+= $ddtcArr[$j];
 				//again need to check that the element exists at that point.
-				if(isset($csDelta2030Arr[$j])){
-					$avrgCSDelta010  += $csDelta010Arr[$j];
+				if($checked010){
+					$avrgCSDelta010 	+= $csDelta010Arr[$j-1];
 				}
-				if(isset($csDelta2030Arr[$j])){
-					$avrgCSDelta1020 += $csDelta1020Arr[$j];
+				if($checked1020){
+					$avrgCSDelta1020	+= $csDelta1020Arr[$j-1];
 				}
-				if(isset($csDelta2030Arr[$j])){
-					$avrgCSDelta2030 += $csDelta2030Arr[$j];
+				if($checked2030){
+					$avrgCSDelta2030	+= $csDelta2030Arr[$j-1];
 				}
 				$champIdNumArr[$j] =- 1; //change that id to -1 so we dont check it again.
 			}
@@ -187,6 +169,7 @@ for ($i = 0; $i < sizeof($champIdNumArr); $i++){
 
 		//Stores the times played (values) with thier respective champions (keys) in an associative array.
 		$champsWithCounts[$champIdNum] = $gamesPlayed;
+
 		$indexCounter=1; //needed for reset to 1 ech loop since each array is dynamic.
 		//store stats for each champ in a multidimensional array.
 		$champStats[$indexCounterLoop][0]	= array('champId'		=> $champIdNum);
@@ -200,83 +183,96 @@ for ($i = 0; $i < sizeof($champIdNumArr); $i++){
 		$champStats[$indexCounterLoop][8]	= array('kills'			=> $avrgKills/$gamesPlayed);
 		$champStats[$indexCounterLoop][9]	= array('deaths'		=> $avrgDeaths/$gamesPlayed);
 		$champStats[$indexCounterLoop][10]	= array('assists'		=> $avrgAssists/$gamesPlayed);
-		$champStats[$indexCounterLoop][11]	= array('kda'			=> ($avrgKills+$avrgAssists)/$avrgDeaths);
 		$champStats[$indexCounterLoop][12]	= array('firstBlood'	=> ($avrgFirstblood/$gamesPlayed)*100 );
 		$champStats[$indexCounterLoop][13]	= array('damageDealt'	=> $avrgddtc/$gamesPlayed);
 		$champStats[$indexCounterLoop][14]	= array('gamesPlayed'	=> $gamesPlayed);
 
+		if($avrgDeaths == 0){
+			$champStats[$indexCounterLoop][11]	= array('kda'		=> $avrgKills+$avrgAssists);
+		}
+		elseif($avrgDeaths!=0){
+			$champStats[$indexCounterLoop][11]	= array('kda'		=> ($avrgKills+$avrgAssists)/$avrgDeaths);
+		}
+
 		if($checked010){
-			$champStats[$indexCounterLoop][8+$indexCounter]	= array('csDelta010'	=> $avrgCSDelta010/$gamesPlayed);
+			$champStats[$indexCounterLoop][14+$indexCounter] = array('csDelta010'	=>$avrgCSDelta010/$gamesPlayed );
 			$indexCounter++;
 	  }
 		if($checked1020){
-			$champStats[$indexCounterLoop][8+$indexCounter]	= array('csDelta1020' 	=> $avrgCSDelta1020/$gamesPlayed);
+			$champStats[$indexCounterLoop][14+$indexCounter] = array('csDelta1020'	=>$avrgCSDelta1020/$gamesPlayed);
 			$indexCounter++;
 		}
 		if($checked2030){
-			$champStats[$indexCounterLoop][8+$indexCounter]	= array('csDelta2030' 	=> $avrgCSDelta2030/$gamesPlayed);
+			$champStats[$indexCounterLoop][14+$indexCounter] = array('csDelta2030'	=>$avrgCSDelta2030/$gamesPlayed);
 	  }
 
-		$gamesPlayed = 1; //reset games played before iterates again
+		$gamesPlayed = 1;	 //reset games played before iterates again
 		$indexCounterLoop++; //increase loopcounter before iteration
 	}
 }
-
+/*testing statement
+foreach ($champsWithCounts as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}*/
 //sorts the associative array $champsWithCounts in descending order with respect to the values.
 arsort($champsWithCounts);
 
 //stores the top five champions from $champsWithCounts
 $topFiveChamps = array_slice($champsWithCounts, 0, 5, true);
-
+/*
+foreach ($topFiveChamps as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}*/
+/*
 //stores top five champs STATS in thier respective arrays.
-
-/* VARIABLES USED 
-* $champ 				
-* $firstChampsStats 	
-* $secondChampsStats 	
-* $thirdChampsStats 	
-* $fourthChampsStats	
-* $fifthChampsStats	
+//Initialization
+$champ=1; 								//keeps track of what placement the champ were looking at is on the list of top five.
+$firstChampStats=[];			//stores all information for the champ in first place.
+$secondChampStats=[];		//stores all information for the champ in second place.
+$thirdChampStats=[];			//stores all information for the champ in third place.
+$fourthChampStats=[];		//stores all information for the champ in fourth place.
+$fifthChampStats=[];			//stores all information for the champ in fifth place.
 //iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
 */
-
-for ($i = 0; $i <sizeof($champStats); $i++) {
-	foreach ($champStats[$i][0] as $array => $champion) {
-		foreach ($topFiveChamps as $topFive => $value) {
+foreach ($topFiveChamps as $topFive => $value) {
+	for ($i=0; $i <sizeof($champStats); $i++){
+		foreach ($champStats[$i][0] as $array => $champion) {
 			if($topFive == $champion){
 				//adds the placement of the champion to the array
 				if($champ == 1){
-						$firstChampStats['Placement'] = 'First';
+						$firstChampStats['Placement'] 	= 'First';
 					}
 					else if($champ == 2){
 						$secondChampStats['Placement'] = 'Second';
 					}
 					else if($champ == 3){
-						$thirdChampStats['Placement'] = 'Third';
+						$thirdChampStats['Placement']	= 'Third';
 					}
 					else if($champ == 4){
 						$fourthChampStats['Placement'] = 'Fourth';
 					}
 					else{
-						$fifthChampStats['Placement'] = 'Fifth';
+						$fifthChampStats['Placement'] 	= 'Fifth';
 					}
 				//adds the rest of their stats to thier respective array
-				for ($j = 0; $j <count($champStats[$i]); $j++) {
+				for ($j=0; $j <count($champStats[$i])  ; $j++) {
 					foreach ($champStats[$i][$j] as $statistic => $number) {
 						if($champ == 1){
-								$firstChampStats[$statistic] = $number;
+								$firstChampStats[$statistic]	= $number;
 						}
 						else if($champ == 2){
-							$secondChampStats[$statistic] = $number;
+							$secondChampStats[$statistic]		= $number;
 						}
 						else if($champ == 3){
-							$thirdChampStats[$statistic] = $number;
+							$thirdChampStats[$statistic]		= $number;
 						}
 						else if($champ == 4){
-							$fourthChampStats[$statistic] = $number;
+							$fourthChampStats[$statistic]		= $number;
 						}
 						else{
-							$fifthChampStats[$statistic] = $number;
+							$fifthChampStats[$statistic]		= $number;
 						}
 					}
 				}
@@ -285,57 +281,40 @@ for ($i = 0; $i <sizeof($champStats); $i++) {
 		}
 	}
 }
+
+//PRINT STATEMENTS FOR TESTING
 $champ1 = $api->getStaticChampion($firstChampStats['champId'], true);
+print($champ1->name);
+foreach ($firstChampStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
 $champ2 = $api->getStaticChampion($secondChampStats['champId'], true);
+print($champ2->name);
+foreach ($secondChampStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
 $champ3 = $api->getStaticChampion($thirdChampStats['champId'], true);
+print($champ3->name);
+foreach ($thirdChampStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
 $champ4 = $api->getStaticChampion($fourthChampStats['champId'], true);
+print($champ4->name);
+foreach ($fourthChampStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
+echo "<br>";
 $champ5 = $api->getStaticChampion($fifthChampStats['champId'], true);
-
-$champNameArr[0] = $champ1->name;
-$champNameArr[1] = $champ2->name;
-$champNameArr[2] = $champ3->name;
-$champNameArr[3] = $champ4->name;
-$champNameArr[4] = $champ5->name;
-
-
-$_SESSION['firstChamp']	 	= $firstChampStats;
-$_SESSION['secondChamp']	= $secondChampStats;
-$_SESSION['thirdChamp']		= $thirdChampStats;
-$_SESSION['fourthChamp'] 	= $fourthChampStats;
-$_SESSION['fifthChamp'] 	= $fifthChampStats;
-$_SESSION['champName']		= $champNameArr;
-$_SESSION['uname']			= $summonerName;
-
-
-//$champion = $api->getStaticChampion($playerMatchData->championId, true); 
-/*$champ1Name = $champ1->name;
-$champ2Name = $champ2->name;
-$champ3Name = $champ3->name;
-$champ4Name = $champ4->name;
-$champ5Name = $champ5->name;
-print($champ1Name);
-echo "<br>";
-print_r($firstChampStats);
-echo "<br>";
-echo "<br>";
-print($champ2Name);
-echo "<br>";
-print_r($secondChampStats);
-echo "<br>";
-echo "<br>";
-print($champ3Name);
-echo "<br>";
-print_r($thirdChampStats);
-echo "<br>";
-echo "<br>";
-print($champ4Name);
-echo "<br>";
-print_r($fourthChampStats);
-echo "<br>";
-echo "<br>";
-print($champ5Name);
-echo "<br>";
-print_r($fifthChampStats);
-echo "<br>";
-echo "<br>";*/
+print($champ5->name);
+foreach ($fifthChampStats as $key => $value) {
+	echo $key.": ".$value;
+	echo "<br>";
+}
 ?>
