@@ -21,7 +21,7 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-b8c5ace1-d82a-460c-9502-8000ae256534',
+	LeagueAPI::SET_KEY    => 'RGAPI-ad79858e-aa6a-45fd-b821-ecd15339c1d4',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
@@ -155,13 +155,13 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 				$avrgddtc		+= $ddtcArr[$j];
 				//again need to check that the element exists at that point.
 				if($checked010){
-					$avrgCSDelta010 	+= $csDelta010Arr[$j-1];
+					$avrgCSDelta010 	+= $csDelta010Arr[$j];
 				}
 				if($checked1020){
-					$avrgCSDelta1020	+= $csDelta1020Arr[$j-1];
+					$avrgCSDelta1020	+= $csDelta1020Arr[$j];
 				}
 				if($checked2030){
-					$avrgCSDelta2030	+= $csDelta2030Arr[$j-1];
+					$avrgCSDelta2030	+= $csDelta2030Arr[$j];
 				}
 				$champIdNumArr[$j] =- 1; //change that id to -1 so we dont check it again.
 			}
@@ -242,37 +242,37 @@ foreach ($topFiveChamps as $topFive => $value) {
 			if($topFive == $champion){
 				//adds the placement of the champion to the array
 				if($champ == 1){
-						$firstChampStats['Placement'] 	= 'First';
-					}
-					else if($champ == 2){
-						$secondChampStats['Placement'] = 'Second';
-					}
-					else if($champ == 3){
-						$thirdChampStats['Placement']	= 'Third';
-					}
-					else if($champ == 4){
-						$fourthChampStats['Placement'] = 'Fourth';
-					}
-					else{
-						$fifthChampStats['Placement'] 	= 'Fifth';
-					}
+					$firstChampStats['Placement'] 	= 'First';
+				}
+				else if($champ == 2){
+					$secondChampStats['Placement'] = 'Second';
+				}
+				else if($champ == 3){
+					$thirdChampStats['Placement']	= 'Third';
+				}
+				else if($champ == 4){
+					$fourthChampStats['Placement'] = 'Fourth';
+				}
+				else{
+					$fifthChampStats['Placement'] 	= 'Fifth';
+				}
 				//adds the rest of their stats to thier respective array
 				for ($j=0; $j <count($champStats[$i])  ; $j++) {
 					foreach ($champStats[$i][$j] as $statistic => $number) {
 						if($champ == 1){
-								$firstChampStats[$statistic]	= $number;
+							$firstChampStats[$statistic]	= $number;
 						}
 						else if($champ == 2){
-							$secondChampStats[$statistic]		= $number;
+							$secondChampStats[$statistic]	= $number;
 						}
 						else if($champ == 3){
-							$thirdChampStats[$statistic]		= $number;
+							$thirdChampStats[$statistic]	= $number;
 						}
 						else if($champ == 4){
-							$fourthChampStats[$statistic]		= $number;
+							$fourthChampStats[$statistic]	= $number;
 						}
 						else{
-							$fifthChampStats[$statistic]		= $number;
+							$fifthChampStats[$statistic]	= $number;
 						}
 					}
 				}
