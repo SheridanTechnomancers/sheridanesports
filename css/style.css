@@ -1,65 +1,76 @@
+/*CSS file for the login page*/
 body{
-    margin: 0;
-    padding: 0;
-    background-color: #f2f2f2;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content:flex-start;
+  align-items: stretch;
 }
-.background {
-    float: right;
-    width: 73%;
-    height: 100vh;
+/*Styling sidebar form*/
+form{
+  text-align: center;
+  padding: 0 2.5vw;
+  box-sizing: border-box;
+  width: 27vw;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  background-color: #171717;
 }
-.background img {
-   width: 80%;
-   height: 80vh;
-   margin-top: 10vh;
-   margin-left: 10%;
-   margin-right: 10%;
+form>h1{
+  text-transform: uppercase;
+  font-family: SheridanBruinsOfficialTitle;
+  color: white;
+  font-size:3em;
 }
-.mainPageForm{
-    background-color: #171717;
-    width: 27%;
-    height:100vh;
+form>input{
+  font-size: 1.5em;
+  box-sizing: border-box;
+  margin: 2.5% 0;
+  padding: 3% 5%;
+  border-radius: 5px;
 }
-.loginForm {
-    position: fixed;
-    top: 25%;
-    width: inherit;
+.btn{
+  box-sizing: border-box;
+  padding: 2.5%;
+  width: 49.75%;
+  font-size: 1.5em;
+  overflow: hidden;
 }
-.loginForm input {
-    box-sizing: border-box;
-    border-radius: 5px;
-    width:80%;
-    padding: 3% 5%;
-    margin: 2% 10%;
+.formBtn{
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
-.loginForm button {
-    box-sizing: border-box;
-    width: 40%;
-    border: none;
-    padding: 10px;
-    background-color: #2fa3dc;
-    cursor: pointer;
+/*Styling the image and bottom left text*/
+body>span{
+  position: relative;
+  box-sizing: border-box;
+  padding: 7.5vh 7.5vw;
+  width: 73vw;
 }
-
-.logo {
-    box-sizing: border-box;
-    position: absolute;
-    bottom: 2%;
-    right: 2%;
-    color: #0c1f39;
-    font-size: 2vw;
-    background-color: #f2f2f2;
+img{
+  height: 100%;
+  width: 100%;
 }
-.title{
-    font-family: SheridanBruinsOfficialTitle;
-    color: white;
-    font-size:3.5em;
+body>span>h3{
+  position: absolute;
+  bottom: 2.5%;
+  right: 2%;
+  font-weight: bold;
+  font-size: 2vw;
+  color: #0c1f39;
+  background-color: #f2f2f2;
+  text-transform: uppercase;
 }
 @font-face{
-    font-family: SheridanBruinsOfficialTitle;
-    src: url(Evogria_1.ttf);
+  font-family: SheridanBruinsOfficialTitle;
+  src: url(Evogria_1.ttf);
 }
 @font-face{
-    font-family: SheridanBruinsOfficial;
-    src: url(big_noodle_titling.ttf);
+  font-family: SheridanBruinsOfficial;
+  src: url(big_noodle_titling.ttf);
 }

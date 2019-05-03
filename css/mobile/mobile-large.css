@@ -1,2 +1,18 @@
 /*This media query is to be used with tablets. */
-
+@media only screen and (max-width: 1024px){
+  form{
+    width: 30vw;
+  }
+  form>h1{
+    font-size:1.5em;
+  }
+  form>input{
+    font-size: 1em;
+  }
+  .btn{
+    padding: 2.5%;
+    width: 49.75%;
+    font-size: 1em;
+    overflow: hidden;
+  }
+}
