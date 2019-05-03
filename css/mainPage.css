@@ -1,68 +1,61 @@
+/*CSS sheet for the main page*/
+/*General styles*/
 body{
     background-image: linear-gradient(to right, #001122, #001d3b);
     margin:0px;
     padding:0px;
-    min-height: 100vh;
+    height: 100vh;
+    color: white;
 }
-.layout {
-    display: flex;
-    flex-direction: column;
+a{
+  color: inherit;
+  font-family: "Arial";
+  font-weight: bold;
+  font-size: 1vw;
+  text-transform: uppercase;
+  text-decoration: none;
 }
-.header{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-.header img{
+
+/*Styling the header*/
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header>img{
     height: 18vh;
     width: 20vw;
 }
-.header a{
+header>a{
     margin-right:3.5%;
-    font-family: "Arial";
-    font-size: 150%;
-    font-weight: bold;
-    font-variant: small-caps;
-    text-decoration: none;
-    align-self: center;
-    color: white;
 }
-/* Need to Center the Countdown inside the header 
-.header h2 {
-  color: white;
+/*Styling the countdown*/
+header h2 {
   font-size: 3em;
-}*/
-.content {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    //width: 90vw; /* remove when adding the sidebar*/
-  }
-.content iframe {
-    flex: 2;
-    height: 80vh;
-    margin-left: 10%;
 }
- // hidden until later date
-  .content ul {
-    margin-top: 5%;
-    width: 10%;
-
-  }
-
-  .content li{
-      margin: 30% 15% 15% 0%;
-      text-align: center;
-      color: white;
-      font-family: "Arial";
-      list-style-type: none;
-      font-weight: bold;
-      font-variant: small-caps;
-      font-size: 150%;
-  }
-  .content a{
-    text-decoration: none;
-    color: white;
-  }
-
+/*Styling video*/
+iframe{
+  display: block;
+  height: 80vh;
+  width: 80vw;
+  margin: 0 auto;
+}
+/*Styling the side menu*/
+aside{
+  height: 80vh;
+  width: 10vw;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+aside>nav{
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+a>img{
+  height: 1.75vh;
+  width: 1vw;
+}
