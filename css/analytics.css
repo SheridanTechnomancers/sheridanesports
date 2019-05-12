@@ -1,0 +1,22 @@
+/*CSS sheet for the analytics page*/
+/*General styles*/
+body{
+    background-image: linear-gradient(to right, #001122, #001d3b);
+    margin:0px;
+    padding:0px;
+    height: 100vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+table,th,tr,td{
+  border:solid 2.5px;
+}
+table{
+  text-align: center;
+  border-collapse: collapse;
+  vertical-align: middle;
+}

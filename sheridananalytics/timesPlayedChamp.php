@@ -14,12 +14,12 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-b8c5ace1-d82a-460c-9502-8000ae256534',
+	LeagueAPI::SET_KEY    => 'RGAPI-b668f3f5-c118-401f-aabd-5c3143e86008',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = $_POST['uname']; //HARDCODED SUMMONER NAME
+$summonerName = 'IG%20Mythbran'; //HARDCODED SUMMONER NAME
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
 
 //needed initializations
@@ -28,7 +28,7 @@ foreach($matchlistSolo->matches as $game){
 
 		$gameIds[] = $game->gameId;
 		//$gameChampId[] = $game->champion;
-	
+
 }
 
 //initilizations
@@ -177,14 +177,23 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		if($checked010){
 			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 0-10 (m)'=>$avrgCSDelta010/$gamesPlayed );
 			$indexCounter++;
-	  }
+	  }else {
+			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 0-10 (m)'=>0 );
+			$indexCounter++;
+		}
 		if($checked1020){
 			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 10-20 (m)'=>$avrgCSDelta1020/$gamesPlayed);
+			$indexCounter++;
+		}else {
+			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 10-20 (m)'=>0 );
 			$indexCounter++;
 		}
 		if($checked2030){
 			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 20-30 (m)'=>$avrgCSDelta2030/$gamesPlayed);
-	  }
+	  }else {
+			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 20-30 (m)'=>0 );
+			$indexCounter++;
+		}
 
 		$gamesPlayed=1; //reset games played before iterates again
 		$indexCounterLoop++; //increase loopcounter before iteration
@@ -263,6 +272,7 @@ foreach ($topFiveChamps as $topFive => $value) {
 }
 
 //PRINT STATEMENTS FOR TESTING
+/*
 foreach ($firstChampsStats as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
@@ -286,5 +296,4 @@ echo "<br>";
 foreach ($fifthChampsStats as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
-}
-?>
+}*/
