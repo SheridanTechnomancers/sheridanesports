@@ -19,7 +19,7 @@ $api = new LeagueAPI([
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
-$summonerName = 'IG%20Mythbran'; //HARDCODED SUMMONER NAME
+$summonerName = 'Misleading'; //HARDCODED SUMMONER NAME
 $account = $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
 
 //needed initializations
@@ -27,7 +27,7 @@ $matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKIN
 foreach($matchlistSolo->matches as $game){
 
 		$gameIds[] = $game->gameId;
-		//$gameChampId[] = $game->champion;
+		$gameChampId[] = $game->champion;
 
 }
 
@@ -36,8 +36,10 @@ $champIdNumArr = array_fill(0, 100, -1); //champ id array
 //finds the champ ids for most recent 100 games. Currently only pulls the most recent games due to error if try with 100
 for ($j=0; $j<51; $j++){
 	$matchData = $api->getMatch($gameIds[$j]);
+	$counter=0; //counter to prevent participant array from appending instead of overwriting
 	foreach($matchData->participantIdentities as $participantIds){
-		$participant[] = $participantIds->player;
+		$participant[$counter] = $participantIds->player;
+		$counter++;
 	}
 
 	for($i=0; $i<10; $i++){
@@ -51,7 +53,6 @@ for ($j=0; $j<51; $j++){
   //might need to use $gameChampId instead.
 	//places each champion id in predefined array
 	$champIdNumArr[$j]=$playerMatchData->championId;
-
   //stores stats per game for each champ
 	$goldEarnedArr[$j]= $playerMatchData->stats->goldEarned; 					//GOLD EARNED
 	$gameTimeArr[$j]= floor(($matchData->gameDuration));				//TOTAL MINUTES GAME TIME
@@ -120,7 +121,7 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		}
 
 		//checks to see how many times the champions been played.
-		for($j=$i+1;$j<sizeof($champIdNumArr)-$j;$j++){
+		for($j=$i+1;$j<sizeof($champIdNumArr)-$i;$j++){
 			if($champIdNum== $champIdNumArr[$j]){
 				$gamesPlayed++;
 				//adds the stats from those games to the original value.
@@ -199,7 +200,7 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		$indexCounterLoop++; //increase loopcounter before iteration
 	}
 }
-/*testing statement
+/*for testing
 foreach ($champsWithCounts as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";

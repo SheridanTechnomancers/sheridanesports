@@ -21,7 +21,7 @@ DataDragonAPI::initByCdn();
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-5091ef9a-15ac-4f54-8b90-fa94b10eac66',
+	LeagueAPI::SET_KEY    => 'RGAPI-b668f3f5-c118-401f-aabd-5c3143e86008',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
@@ -140,7 +140,7 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		}
 
 		//checks to see how many times the champions been played.
-		for($j=$i+1;$j<sizeof($champIdNumArr)-$j;$j++){
+		for($j=$i+1;$j<sizeof($champIdNumArr)-$i;$j++){
 			if($champIdNum == $champIdNumArr[$j]){
 				$gamesPlayed++;
 				//adds the stats from those games to the original value.
@@ -211,11 +211,11 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 		$indexCounterLoop++; //increase loopcounter before iteration
 	}
 }
-/*testing statement
+
 foreach ($champsWithCounts as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
-}*/
+}
 //sorts the associative array $champsWithCounts in descending order with respect to the values.
 arsort($champsWithCounts);
 
