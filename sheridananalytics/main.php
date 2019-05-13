@@ -27,7 +27,7 @@ $api = new LeagueAPI([
 ]);
 
 //TAKING THINGS FROM INDEX.PHP
-$summonerName 		= 'Misleading';		//USERNAME
+$summonerName 		= $_POST['uname'];		//USERNAME
 //print_r($_POST['uname']);
 //$ROLE = $_POST['role'];
 $account 			= $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
@@ -51,8 +51,8 @@ $secondChampStats	= [];		//stores all information for the champ in second place.
 $thirdChampStats	= [];		//stores all information for the champ in third place.
 $fourthChampStats	= [];		//stores all information for the champ in fourth place.
 $fifthChampStats	= [];		//stores all information for the champ in fifth place.
-//iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
 
+//iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
 
 //needed initializations
 $matchlistSolo = $api->getMatchListByAccount($account->accountId, 420); //WORKING
@@ -108,7 +108,6 @@ for ($j=0; $j<51; $j++){
 	$csDelta2030Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['20-30'];		//CS DELTA FOR MINUTES 20-30
   }
 }
-
 
 //iterates through champ id array and stores the games played with them in $champsWithCounts, also calculates stats and stores them in $champStats.
 for ($i=0;$i<sizeof($champIdNumArr);$i++){
@@ -212,31 +211,25 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 	}
 }
 
+/*for testing
 foreach ($champsWithCounts as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
-}
+}*/
+
 //sorts the associative array $champsWithCounts in descending order with respect to the values.
 arsort($champsWithCounts);
 
 //stores the top five champions from $champsWithCounts
 $topFiveChamps = array_slice($champsWithCounts, 0, 5, true);
-/*
+
+/* for testing
 foreach ($topFiveChamps as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
 }*/
-/*
-//stores top five champs STATS in thier respective arrays.
-//Initialization
-$champ=1; 								//keeps track of what placement the champ were looking at is on the list of top five.
-$firstChampStats=[];			//stores all information for the champ in first place.
-$secondChampStats=[];		//stores all information for the champ in second place.
-$thirdChampStats=[];			//stores all information for the champ in third place.
-$fourthChampStats=[];		//stores all information for the champ in fourth place.
-$fifthChampStats=[];			//stores all information for the champ in fifth place.
+
 //iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
-*/
 foreach ($topFiveChamps as $topFive => $value) {
 	for ($i=0; $i <sizeof($champStats); $i++){
 		foreach ($champStats[$i][0] as $array => $champion) {
@@ -284,6 +277,7 @@ foreach ($topFiveChamps as $topFive => $value) {
 }
 
 //PRINT STATEMENTS FOR TESTING
+/*
 $champ1 = $api->getStaticChampion($firstChampStats['champId'], true);
 print($champ1->name);
 foreach ($firstChampStats as $key => $value) {
@@ -317,5 +311,4 @@ print($champ5->name);
 foreach ($fifthChampStats as $key => $value) {
 	echo $key.": ".$value;
 	echo "<br>";
-}
-?>
+}*/
