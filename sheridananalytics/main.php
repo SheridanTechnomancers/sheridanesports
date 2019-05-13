@@ -16,18 +16,18 @@ use RiotAPI\LeagueAPI\Definitions\Region;
 use RiotAPI\DataDragonAPI\DataDragonAPI;
 use RiotAPI\DataDragonAPI\Definitions\Map;
 
-DataDragonAPI::initByCdn(); 
+DataDragonAPI::initByCdn();
 //EVAN'S CALLBACK CODE dWUxOnl1Yjh0eWJGYjF0RndrX3FwVEVwVHcuYXloaWlsT1NULXFXM1Z5WkNXaXd3dw%3D%3D
 //  Initialize the library
 $api = new LeagueAPI([
 	//  Your API key, you can get one at https://developer.riotgames.com/
-	LeagueAPI::SET_KEY    => 'RGAPI-ad79858e-aa6a-45fd-b821-ecd15339c1d4',
+	LeagueAPI::SET_KEY    => 'RGAPI-5091ef9a-15ac-4f54-8b90-fa94b10eac66',
 	//  Target region (you can change it during lifetime of the library instance)
 	LeagueAPI::SET_REGION => Region::NORTH_AMERICA,
 ]);
 
 //TAKING THINGS FROM INDEX.PHP
-$summonerName 		= $_POST['uname'];		//USERNAME
+$summonerName 		= 'Misleading';		//USERNAME
 //print_r($_POST['uname']);
 //$ROLE = $_POST['role'];
 $account 			= $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
@@ -64,15 +64,16 @@ foreach($matchlistSolo->matches as $game){
 //finds the champ ids for most recent 100 games. Currently only pulls the most recent games due to error if try with 100
 for ($j=0; $j<51; $j++){
 	$matchData = $api->getMatch($gameIds[$j]);
+	$counter=0; //counter to prevent participant array from appending instead of overwriting
 	foreach($matchData->participantIdentities as $participantIds){
-		$participant[] = $participantIds->player;
+		$participant[$counter] = $participantIds->player;
+		$counter++;
 	}
 
 	for($i=0; $i<10; $i++){
 		if($participant[$i]->accountId == $account->accountId)
 			$participantId = $i;
 	}
-
 	//MOVES THE MATCHDATA ARRAY INTO IT'S OWN VARABLE. BREAKING UP THE ARRAY
 	$playerMatchData = $matchData->participants[$participantId];
 
@@ -97,7 +98,7 @@ for ($j=0; $j<51; $j++){
 	$ddtcArr[$j]		= $playerMatchData->stats->totalDamageDealtToChampions;		//TOTAL DAMAGE DEALT TO CHAMPS
 
 	//CS DELTAs, only added if game time is high enough.
-	if(($gameTimeArr[$j]/60%60) >= 10){ // NEED TO BE DONE DIFFERENTLY 
+	if(($gameTimeArr[$j]/60%60) >= 10){ // NEED TO BE DONE DIFFERENTLY
 		$csDelta010Arr[$j]	= $playerMatchData->timeline->creepsPerMinDeltas['0-10'];	//CS DELTA FOR MINUTES 0-10;
 	}
 	if(($gameTimeArr[$j]/60%60) >= 20){
@@ -155,13 +156,13 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 				$avrgddtc		+= $ddtcArr[$j];
 				//again need to check that the element exists at that point.
 				if($checked010){
-					$avrgCSDelta010 	+= $csDelta010Arr[$j];
+					$avrgCSDelta010 	+= $csDelta010Arr[$j-1];
 				}
 				if($checked1020){
-					$avrgCSDelta1020	+= $csDelta1020Arr[$j];
+					$avrgCSDelta1020	+= $csDelta1020Arr[$j-1];
 				}
 				if($checked2030){
-					$avrgCSDelta2030	+= $csDelta2030Arr[$j];
+					$avrgCSDelta2030	+= $csDelta2030Arr[$j-1];
 				}
 				$champIdNumArr[$j] =- 1; //change that id to -1 so we dont check it again.
 			}
