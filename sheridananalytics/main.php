@@ -27,7 +27,7 @@ $api = new LeagueAPI([
 ]);
 
 //TAKING THINGS FROM INDEX.PHP
-$summonerName 		= $_POST['uname'];		//USERNAME
+$summonerName 		= 'IG%20Mythbran'; //summoner name, hardcoded for now (will obtain from user login or db in the future $_POST['uname'];)
 //print_r($_POST['uname']);
 //$ROLE = $_POST['role'];
 $account 			= $api->getSummonerByName($summonerName); //WORKING. Needs to get summoner name from somwhere. Probably login dbase
@@ -106,7 +106,7 @@ for ($j=0; $j<51; $j++){
 }
 
 //iterates through champ id array and stores the games played with them in $champsWithCounts, also calculates stats and stores them in $champStats.
-for ($i=0;$i<sizeof($champIdNumArr);$i++){
+for ($i=0;$i<sizeof($champIdNumArr)-1;$i++){
 	//keeps track of which deltas to add to $champStats, placed here so theyre reset every iteration
 	$checked010 		= false;
 	$checked1020 		= false;

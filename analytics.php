@@ -1,6 +1,6 @@
 <?php
 //will pull from main once its pulling correctly.
- require 'sheridananalytics/timesPlayedChamp.php'; ?>
+ require 'sheridananalytics/main.php'; ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -36,7 +36,7 @@
         <tr>
           <?php
           $i=0;
-          foreach ($firstChampsStats as $key => $value) {
+          foreach ($firstChampStats as $key => $value) {
             if($i==0){echo "<td>".$value."</td>";}
             else{echo "<td>".round($value,2)."</td>";}
             $i++;
@@ -45,7 +45,7 @@
         <tr>
           <?php
           $j=0;
-          foreach ($secondChampsStats as $key => $value) {
+          foreach ($secondChampStats as $key => $value) {
             if($j==0){echo "<td>".$value."</td>";}
             else{echo "<td>".round($value,2)."</td>";}
             $j++;
@@ -54,7 +54,7 @@
         <tr>
           <?php
           $k=0;
-          foreach ($thirdChampsStats as $key => $value) {
+          foreach ($thirdChampStats as $key => $value) {
             if($k==0){echo "<td>".$value."</td>";}
             else{echo "<td>".round($value,2)."</td>";}
             $k++;
@@ -63,7 +63,7 @@
         <tr>
           <?php
           $l=0;
-          foreach ($fourthChampsStats as $key => $value) {
+          foreach ($fourthChampStats as $key => $value) {
             if($l==0){echo "<td>".$value."</td>";}
             else{echo "<td>".round($value,2)."</td>";}
             $l++;
@@ -72,7 +72,7 @@
         <tr>
           <?php
           $m=0;
-          foreach ($fifthChampsStats as $key => $value) {
+          foreach ($fifthChampStats as $key => $value) {
             if($m==0){echo "<td>".$value."</td>";}
             else{echo "<td>".round($value,2)."</td>";}
             $m++;

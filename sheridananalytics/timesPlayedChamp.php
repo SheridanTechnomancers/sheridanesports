@@ -234,11 +234,11 @@ foreach ($topFiveChamps as $key => $value) {
 //stores top five champs STATS in thier respective arrays.
 //Initialization
 $champ=1; 								//keeps track of what placement the champ were looking at is on the list of top five.
-$firstChampsStats=[];			//stores all information for the champ in first place.
-$secondChampsStats=[];		//stores all information for the champ in second place.
-$thirdChampsStats=[];			//stores all information for the champ in third place.
-$fourthChampsStats=[];		//stores all information for the champ in fourth place.
-$fifthChampsStats=[];			//stores all information for the champ in fifth place.
+$firstChampStats=[];			//stores all information for the champ in first place.
+$secondChampStats=[];		//stores all information for the champ in second place.
+$thirdChampStats=[];			//stores all information for the champ in third place.
+$fourthChampStats=[];		//stores all information for the champ in fourth place.
+$fifthChampStats=[];			//stores all information for the champ in fifth place.
 
 //iterates through $champStats, and for each champ that matches the top five we take the values stored and move them to its corresponding placement.
 foreach ($topFiveChamps as $topFive => $value) {
@@ -247,37 +247,37 @@ foreach ($topFiveChamps as $topFive => $value) {
 			if($topFive==$champion){
 				//adds the placement of the champion to the array
 				if($champ==1){
-						$firstChampsStats['Placement']='First';
+						$firstChampStats['Placement']='First';
 					}
 					else if($champ==2){
-						$secondChampsStats['Placement']='Second';
+						$secondChampStats['Placement']='Second';
 					}
 					else if($champ==3){
-						$thirdChampsStats['Placement']='Third';
+						$thirdChampStats['Placement']='Third';
 					}
 					else if($champ==4){
-						$fourthChampsStats['Placement']='Fourth';
+						$fourthChampStats['Placement']='Fourth';
 					}
 					else{
-						$fifthChampsStats['Placement']='Fifth';
+						$fifthChampStats['Placement']='Fifth';
 					}
 				//adds the rest of their stats to thier respective array
 				for ($j=0; $j <count($champStats[$i])  ; $j++) {
 					foreach ($champStats[$i][$j] as $statistic => $number) {
 						if($champ==1){
-								$firstChampsStats[$statistic]=$number;
+								$firstChampStats[$statistic]=$number;
 						}
 						else if($champ==2){
-							$secondChampsStats[$statistic]=$number;
+							$secondChampStats[$statistic]=$number;
 						}
 						else if($champ==3){
-							$thirdChampsStats[$statistic]=$number;
+							$thirdChampStats[$statistic]=$number;
 						}
 						else if($champ==4){
-							$fourthChampsStats[$statistic]=$number;
+							$fourthChampStats[$statistic]=$number;
 						}
 						else{
-							$fifthChampsStats[$statistic]=$number;
+							$fifthChampStats[$statistic]=$number;
 						}
 					}
 				}
