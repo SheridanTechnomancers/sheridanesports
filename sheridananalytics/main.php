@@ -214,6 +214,7 @@ for ($i=0;$i<sizeof($champIdNumArr);$i++){
 			$indexCounter++;
 	  }else{
 			$champStats[$indexCounterLoop][14+$indexCounter]=array('Average CS delta for 0-10 (m)'=>0);
+		}
 		if($checked1020){
 			$champStats[$indexCounterLoop][14+$indexCounter] = array('csDelta1020'	=>$avrgCSDelta1020/$gamesPlayed);
 			$indexCounter++;
