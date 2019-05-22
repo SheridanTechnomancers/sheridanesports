@@ -1,61 +1,65 @@
 /*CSS sheet for the main page*/
 /*General styles*/
 body{
-    background-image: linear-gradient(to right, #001122, #001d3b);
-    margin:0px;
-    padding:0px;
-    height: 100vh;
-    color: white;
-}
-a{
-  color: inherit;
-  font-family: "Arial";
-  font-weight: bold;
-  font-size: 1vw;
-  text-transform: uppercase;
-  text-decoration: none;
+    background-color: #22CBFF;
 }
 
-/*Styling the header*/
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+img{
+	position: relative; 
 }
-header>img{
-    height: 18vh;
-    width: 20vw;
+img.logo{
+	height: 30%;
+	width: 30%;
+	top: 300px; 
+	left: 650px;
 }
-header>a{
-    margin-right:3.5%;
+
+img.cmsn{
+	height: 10%;
+	width: 10%;
+	top: 340px;
+	left: 280px;
 }
+
+img.twitter{
+	height:1.5%;
+	width:1.5%;
+	top: 425px;
+	left: 130px;
+	
+}
+
+
+img.instagram{
+	height:1.5%;
+	width:1.5%;
+	top: 428px;
+	left: 140px;
+}
+
+img.discord{
+	height:1.5%;
+	width:1.5%;	
+	top: 430px;
+	left: 150px;
+}
+
+img:hover{
+	filter: grayscale(100%); 
+}
+
+
+
 /*Styling the countdown*/
-header h2 {
-  font-size: 3em;
+h2{
+	position: relative;
+	text-align: center; 
 }
-/*Styling video*/
-iframe{
-  display: block;
-  height: 80vh;
-  width: 80vw;
-  margin: 0 auto;
+
+h2.countdown{
+	color:white;
+	top: 320px;	
+	font-size: 2em;	
+	font-family: 'Teko', sans-serif;
 }
-/*Styling the side menu*/
-aside{
-  height: 80vh;
-  width: 10vw;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-aside>nav{
-  height: inherit;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-a>img{
-  height: 1.75vh;
-  width: 1vw;
-}
+

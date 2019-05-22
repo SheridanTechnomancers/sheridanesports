@@ -1,7 +1,7 @@
 //for the countdown on the website's main page
 
 // ENTER THE DATE TO COUNT DOWN TO HERE //
-var countDownDate = new Date("Feb 31, 2019 15:00:00").getTime();
+var countDownDate = new Date("sept 1, 2019 00:00:00").getTime();
 
 //update
 var x = setInterval(function() {
@@ -16,7 +16,7 @@ var x = setInterval(function() {
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
   document.getElementById("countdown").innerHTML =
-    days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    days + " : " + hours + " : " + minutes + " : " + seconds;
 
   //when countdown is finished
   if (distance < 0) {
