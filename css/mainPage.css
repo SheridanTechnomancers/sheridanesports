@@ -1,6 +1,6 @@
 /*CSS sheet for the main page*/
 body {
-    background-color: #22CBFF;
+    background-color: #121212;
 }
 
 .container {
@@ -20,13 +20,13 @@ img {
 }
 
 .logo {
-    width: 50%;
-    height: 50%;
-    min-width: 200px;
-    min-height: 66px;
-    max-width: 666px;
-    max-height: 220px;
+    width: 20%;
+    height: 20%;
     display: block;
+    min-width: 100px;
+    min-height: 122px;
+    max-width: 266px;
+    max-height: 311;
 }
 
 .cmsn {
@@ -52,7 +52,7 @@ img {
 
 .twitter {
     width: 5%;
-    margin-left: 37%;
+    margin-left: 39%;
     padding-bottom: 2%;
 }
 
